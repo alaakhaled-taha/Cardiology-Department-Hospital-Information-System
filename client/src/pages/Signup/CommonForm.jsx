@@ -9,7 +9,7 @@ const CommonForm = ({ register, errors, getValues }) => {
           First Name
         </label>
         <input
-          {...register("first_name", {
+          {...register("name", {
             required: "First name is required",
             minLength: {
               value: 2,

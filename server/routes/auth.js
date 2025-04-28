@@ -1,60 +1,113 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const { Patient, Doctor } = require('../models');
+const { Patient, Doctor } = require("../models");
 
 // Register Patient
-router.post('/register/patient', async (req, res) => {
+router.post("/register/patient", async (req, res) => {
   const { name, email, password, date_of_birth, gender } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newPatient = await Patient.create({ 
-      name, 
-      email, 
-      password: hashedPassword, 
+    const newPatient = await Patient.create({
+      name,
+      email,
+      password: hashedPassword,
       date_of_birth,
-      gender     
+      gender,
     });
-    res.status(201).json({ message: 'Patient created successfully!' });
+    res.status(201).json({ message: "Patient created successfully!" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
 // Register Doctor
-router.post('/register/doctor', async (req, res) => {
+router.post("/register/doctor", async (req, res) => {
   const { name, email, password, specialty, contact_info } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newDoctor = await Doctor.create({ name, email, password: hashedPassword, specialty, contact_info });
-    res.status(201).json({ message: 'Doctor created successfully!' });
+    const newDoctor = await Doctor.create({
+      name,
+      email,
+      password: hashedPassword,
+      specialty,
+      contact_info,
+    });
+    res.status(201).json({ message: "Doctor created successfully!" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
 // Login (common for both)
-router.post('/login', async (req, res) => {
-  const { email, password, role } = req.body; // role = "patient" or "doctor"
-  
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body; // role = "patient" or "doctor"
+  console.log("Login attempt with:", email); // Log the request
   try {
-    let user;
-    if (role === 'patient') {
-      user = await Patient.findOne({ where: { email } });
-    } else if (role === 'doctor') {
-      user = await Doctor.findOne({ where: { email } });
-    } else {
-      return res.status(400).json({ error: 'Invalid role' });
+    const results = await Promise.all([
+      Patient.findOne({ where: { email } }),
+      Doctor.findOne({ where: { email } }),
+    ]);
+    const [patient, doctor] = results;
+    const user = patient || doctor;
+    if (!user) {
+      console.error("can't find user");
+      return res.status(401).json({
+        success: false,
+        message: " failed",
+        details: "No user found with this email",
+      });
     }
 
-    if (!user) return res.status(400).json({ error: 'User not found' });
+    const role = patient ? "patient" : "doctor";
+    const userData = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    // Add role-specific fields
+    if (role === "doctor") {
+      userData.specialty = user.specialty;
+      userData.contactInfo = user.contact_info;
+    } else {
+      userData.dateOfBirth = user.date_of_birth;
+      userData.gender = user.gender;
+    }
+    // let role="patient";
+    // let user = await Patient.findOne({ where: { email } });
+    // if (!user) {
+    //   // Check if the email exists in Doctor model
+    //   user = await Doctor.findOne({ where: { email } });
+    //   role = "doctor"; // If found in Doctor, set role as 'doctor'
+    //   }else {
+    //       return res.status(400).json({ error: 'Invalid role' });
+    //     }
+
+    if (!user) return res.status(401).json({ error: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid password' });
+    if (!isMatch) {
+      console.error("password mismatch");
+      return res.status(401).json({
+        success: false,
+        message: "password failed",
+        details: "Incorrect password",
+      });
+    }
 
-    const token = jwt.sign({ id: user.id, role }, 'your_secret_key', { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user.id, role, email: user.email },
+      "your_secret_key",
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.json({ token });
   } catch (error) {
@@ -63,23 +116,23 @@ router.post('/login', async (req, res) => {
 });
 
 // Get Profile (for both)
-router.get('/me', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'No token provided' });
+router.get("/me", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
 
   try {
-    const decoded = jwt.verify(token, 'your_secret_key');
+    const decoded = jwt.verify(token, "your_secret_key");
     let user;
-    if (decoded.role === 'patient') {
+    if (decoded.role === "patient") {
       user = await Patient.findByPk(decoded.id);
-    } else if (decoded.role === 'doctor') {
+    } else if (decoded.role === "doctor") {
       user = await Doctor.findByPk(decoded.id);
     } else {
-      return res.status(400).json({ error: 'Invalid role' });
+      return res.status(400).json({ error: "Invalid role" });
     }
     res.json(user);
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: "Invalid token" });
   }
 });
 
