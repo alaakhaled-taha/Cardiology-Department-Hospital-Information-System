@@ -1,0 +1,204 @@
+:root {
+  --soft-blue: #295baa; /* تغيير اللون إلى أزرق هادي */
+  --soft-accent: #a4a7b1; /* تغيير اللون إلى أكسنت هادي */
+  --soft-light: #f4f7fa; /* تغيير اللون إلى لون فاتح وهادئ */
+  --soft-green: #7cfc00; /* تغيير اللون إلى أخضر ناعم */
+}
+
+.signin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--soft-light);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="none" stroke="rgba(108, 124, 148, 0.1)" stroke-width="0.5" d="M20,50 Q35,20 50,50 Q65,80 80,50" /></svg>');
+  padding: 20px;
+}
+
+.cardiology-card {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(108, 124, 148, 0.2); /* ظلال أخف */
+}
+
+.cardiology-design-side {
+  flex: 1;
+  background: linear-gradient(
+    135deg,
+    var(--soft-blue) 0%,
+    #5c6b7b 100%
+  ); /* ألوان أكثر نعومة */
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  display: none; /* Hide on mobile */
+}
+
+@media (min-width: 768px) {
+  .cardiology-design-side {
+    display: flex;
+  }
+}
+
+.cardiology-header {
+  text-align: center;
+  z-index: 2;
+}
+
+.heartbeat-icon {
+  font-size: 3.5rem; /* زيادة الحجم ليكون أكبر */
+  color: #6c7c94; /* اللون الهادئ الجديد */
+  margin-bottom: 1rem;
+  animation: pulse 3s infinite; /* جعل النبضة أطول */
+}
+
+@keyframes pulse {
+  0% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.1);
+  } /* زيادة النبضة لتكون أطول */
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.ecg-animation {
+  height: 140px; /* زيادة الارتفاع */
+  background: 
+    /* ECG grid */ linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px
+      )
+      0 0 / 25px 100%,
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0
+      0 / 10% 10px,
+    /* تعديل SVG لزيادة عرض الخطوط */
+      url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201800%20300%22%3E%3Cpath%20d%3D%22M0%2C150%20L1800%2C150%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.2)%22%20stroke-width%3D%221%22%2F%3E%3Cpath%20d%3D%22M0%2C150%20L200%2C150%20C210%2C150%20215%2C50%20225%2C50%20C235%2C50%20240%2C120%20250%2C120%20L260%2C120%20L270%2C120%20L275%2C250%20L280%2C30%20L285%2C270%20L290%2C150%20C300%2C150%20310%2C220%20320%2C220%20C330%2C220%20340%2C150%20350%2C150%20L700%2C150%20M700%2C150%20L900%2C150%20C910%2C150%20915%2C50%20925%2C50%20C935%2C50%20940%2C120%20950%2C120%20L960%2C120%20L970%2C120%20L975%2C250%20L980%2C30%20L985%2C270%20L990%2C150%20C1000%2C150%201010%2C220%201020%2C220%20C1030%2C220%201040%2C150%201050%2C150%20L1400%2C150%20M1400%2C150%20L1600%2C150%20C1610%2C150%201615%2C50%201625%2C50%20C1635%2C50%201640%2C120%201650%2C120%20L1660%2C120%20L1670%2C120%20L1675%2C250%20L1680%2C30%20L1685%2C270%20L1690%2C150%20C1700%2C150%201710%2C220%201720%2C220%20C1730%2C220%201740%2C150%201750%2C150%20L1800%2C150%22%20stroke%3D%22%23ff3366%22%20stroke-width%3D%228%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E")
+      0 0;
+  background-repeat: repeat-x;
+  animation: ecgMove 6s linear infinite;
+  position: relative;
+}
+
+@keyframes ecgMove {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: -1200px 0, -1200px 0, -1200px 0;
+  }
+}
+
+.ecg-animation::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20180%22%3E%0A%20%20%3Cpath%20d%3D%22M0%2C90%20C200%2C85%20400%2C95%20600%2C90%20C800%2C85%201000%2C95%201200%2C90%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.1)%22%20stroke-width%3D%221%22%20fill%3D%22none%22%2F%3E%0A%3C%2Fsvg%3E");
+  animation: ecgMove 10s linear infinite;
+  opacity: 0.4;
+}
+
+.signin-form-side {
+  flex: 1;
+  padding: 40px;
+  background: white;
+}
+
+.form-title {
+  color: var(--soft-blue); /* اللون الأكثر نعومة */
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--soft-blue); /* اللون الأكثر نعومة */
+  margin-bottom: 8px;
+}
+
+.form-control {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 15px;
+  width: 100%;
+}
+
+.form-control:focus {
+  border-color: var(--soft-blue);
+  box-shadow: 0 0 0 0.25rem rgba(108, 124, 148, 0.25);
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.cardiology-btn {
+  background-color: var(--soft-accent); /* استخدام اللون الهادئ */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.cardiology-btn:hover {
+  background-color: #a4a7b1; /* التأثير عند المرور بالماوس */
+  transform: translateY(-2px);
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+}
+
+.signup-link a {
+  color: var(--soft-blue); /* اللون الأكثر نعومة */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  border-radius: 5px;
+}
