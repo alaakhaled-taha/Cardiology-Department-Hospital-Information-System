@@ -3,10 +3,12 @@
     "dev": "concurrently \"npm run dev --prefix client\" \"nodemon server/server.js\""
   },
   "dependencies": {
+    "bootstrap": "^5.3.5",
     "create-vite": "^6.4.1"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "vite": "^6.3.4"
   },
   "name": "phase1-database-sbe_database_spring25_team03",
   "version": "1.0.0",

@@ -8,12 +8,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "./pages/Signup/Signup"; // Make sure to import your SignUp component
 import SignIn from "./pages/Signin/Signin";
 import Profile from "./pages/Profile"
+import Homepage from "./pages/HomePage/Home";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignUp />} />
+        <Route path="/" element={<Homepage />} /> //trying to make the default the homepage
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/profile" element={<Profile />} />
