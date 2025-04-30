@@ -54,10 +54,12 @@ router.post("/login", async (req, res) => {
     const user = patient || doctor;
     if (!user) {
       console.error("can't find user");
-      return res.status(401).json({
-        success: false,
+      //added
+      console.log("No user found with ID:", decoded.id);
+      return res.status(401).json({ error: "User not found"
+       /* success: false,
         message: " failed",
-        details: "No user found with this email",
+        details: "No user found with this email",*/
       });
     }
 
@@ -102,14 +104,18 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, role, email: user.email },
+      { 
+         id: user.id,        
+         role: user.role,
+         email: user.email 
+        },
       "your_secret_key",
       {
         expiresIn: "1h",
       }
     );
 
-    res.json({ token });
+    res.json({ token, user:userData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -122,18 +128,42 @@ router.get("/me", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, "your_secret_key");
+    console.log("Decoded JWT:", decoded);
     let user;
     if (decoded.role === "patient") {
       user = await Patient.findByPk(decoded.id);
+      //console.log("Fetched patient:", user);
     } else if (decoded.role === "doctor") {
       user = await Doctor.findByPk(decoded.id);
-    } else {
+     // console.log("Fetched doctor:", user);
+    } 
+    else {
       return res.status(400).json({ error: "Invalid role" });
     }
+//added
+if (!user) return res.status(404).json({ error: "User not found" });
+
+
+    console.log("found user", user);
+
     res.json(user);
   } catch (error) {
+    console.error("JWT error:", error.message);
     res.status(401).json({ error: "Invalid token" });
   }
 });
+//added
+// Temporary route for debugging
+router.get("/patients", async (req, res) => {
+  try {
+    const patients = await Patient.findAll();
+    res.json(patients);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
 
 module.exports = router;

@@ -33,7 +33,7 @@ const SigninForm = () => {
           }
         }
       );
-      console.log(response); 
+      console.log("Login response data:", response.data); 
       if (response.data.token) {
         console.log("Sign-In Successful!", response.data);
         alert("Login successful");
