@@ -8,7 +8,7 @@ import CommonForm from "./CommonForm";
 import { userTypes } from "../../enums/useType";
 import { Link } from "react-router-dom";
 
-import { FaUserMd, FaUserAlt } from "react-icons/fa";
+import { FaUserMd, FaUserAlt, FaHeartbeat } from "react-icons/fa";
 
 import "./Signup.css";
 
@@ -70,8 +70,11 @@ const SignupForm = () => {
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-9 col-xl-7">
-          <div className="card shadow-lg p-5 rounded">
-            <h2 className="text-center mb-4 ">Create Account</h2>
+          <div className="card  card-shadow-primary-xl shadow-xl shadow-intensity-lg p-5 rounded">
+            <h2 className="text-center mb-4 ">
+              <FaHeartbeat className="me-2" />
+              CardioCare Registration
+            </h2>
 
             <div
               className="card-body"
@@ -79,8 +82,14 @@ const SignupForm = () => {
             >
               <div className="form-section first-section d-flex justify-content-between align-items-center mb-1">
                 <div>
-                  <h6 className="word">Let's start with</h6>
-                  <h1 className="p-1">{userType && ` The ${userType}`}</h1>
+                  <h6 className="word">Welcome to CardioCare</h6>
+                  <h2 className="p-1">
+                    {userType
+                      ? `${
+                          userType.charAt(0).toUpperCase() + userType.slice(1)
+                        } Registration`
+                      : "Select Your Role"}
+                  </h2>
                 </div>
 
                 <div>
@@ -89,21 +98,21 @@ const SignupForm = () => {
                     <div className="role-buttons d-flex">
                       <button
                         className={`role-btn ${
-                          userType === userTypes.doctor ? "selected" : ""
+                          userType === userTypes.doctor ? "" : "selected"
                         } mx-2`}
                         onClick={() => handleRoleChange(userTypes.doctor)}
                       >
                         <FaUserMd className="me-2" />
-                        Sign up as Doctor
-                      </button>
+                        I'm a Doctor
+                      </button>git 
                       <button
                         className={`role-btn ${
-                          userType === userTypes.patient ? "selected" : ""
+                          userType === userTypes.patient ? "" : "selected"
                         } mx-2`}
                         onClick={() => handleRoleChange(userTypes.patient)}
                       >
                         <FaUserAlt className="me-2" />
-                        Sign up as Patient
+                        I'm a Patient
                       </button>
                     </div>
                   </div>

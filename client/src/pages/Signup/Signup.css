@@ -15,7 +15,7 @@ body {
   color: white;
 }
 /* Title  */
-.card .d-flex h1 {
+.card .d-flex h2 {
   color: var(--secondary-color);
 }
 
@@ -23,6 +23,16 @@ body {
   padding: 25px;
   background-color: white;
 }
+
+
+
+/* For an even more dramatic colored shadow */
+.card-shadow-primary-xl{
+  box-shadow: 
+    0 20px 25px 6px rgba(65, 104, 168, 0.4),
+    0 10px 10px 1px rgba(20, 35, 59, 0.2);
+}
+
 
 .role-btn {
   color: black;
