@@ -8,6 +8,8 @@ import DoctorForm from "./DoctorForm";
 import PatientForm from "./PatientForm";
 import CommonForm from "./CommonForm";
 import { userTypes } from "../../enums/useType";
+import { Link } from "react-router-dom";
+
 import "./Signup.css";
 
 const SignupForm = () => {
@@ -50,7 +52,6 @@ const SignupForm = () => {
       const res = await axios.post(apiUrl, formData);
       console.log(res);
       alert("Account created successfully!");
-      reset();
       navigate("/profile");
     } catch (err) {
       console.error(err);
@@ -148,6 +149,11 @@ const SignupForm = () => {
                     {isSubmitting ? "Creating Account..." : "Sign Up"}
                   </button>
                 </div>
+                <div className="text-center mt-3">
+                 <p>
+                   Already have an account? <Link to="/signin">Sign in here</Link>
+                </p>
+               </div>
               </form>
             </div>
           </div>

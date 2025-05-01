@@ -8,10 +8,10 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-     useEffect(() => {
+  useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-      console.log("Token from localStorage:", token); // ✅ Log token
+      
       if (!token) {
         setError("No token found. Please log in.");
         setLoading(false);
@@ -24,55 +24,64 @@ const ProfilePage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Profile response:", response.data);
-        setProfile(response.data);
+
+        if (response.data.success) {
+          setProfile(response.data.user);
+        } else {
+          setError(response.data.error || "Failed to load profile");
+        }
       } catch (err) {
-        console.error( err);
-        setError("Failed to load profile. Please log in again.");
+        console.error("Profile error:", {
+          message: err.message,
+          response: err.response?.data,
+          status: err.response?.status
+        });
+        
+        setError(
+          err.response?.data?.error || 
+          err.message || 
+          "Failed to load profile. Please try again."
+        );
+        
+        // If token is invalid, clear it
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+        }
       } finally {
         setLoading(false);
       }
     };
 
-   /* useEffect(() => {
-      console.log("Fetching profile...");
-      const token = localStorage.getItem("token");
-      console.log("Token:", token); // Log token to verify it's stored
-    
-      const fetchProfile = async () => {
-        if (!token) {
-          setError("No token found. Please log in.");
-          setLoading(false);
-          return;
-        }
-    
-        try {
-          const response = await axios.get("http://localhost:5000/api/auth/me", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          console.log("Profile response:", response.data); // <--- Add this
-          setProfile(response.data);
-        } catch (err) {
-          console.error("Error fetching profile:", err); // <--- Add this
-          setError("Failed to load profile. Please log in again.");
-        } finally {
-          setLoading(false);
-        }
-      };*/
-
     fetchProfile();
   }, []);
 
-  if (loading) return <p>Loading profile...</p>;
-  if (error) return <p className="error">{error}</p>;
-  if (!profile) return  <p>No profile data found.</p>;
+  if (loading) {
+    return (
+      <div className="profile-container">
+        <p>Loading profile...</p>
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div className="profile-container">
+        <p className="error">{error}</p>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="profile-container">
+        <p>No profile data found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
-      <h2>Patient Profile</h2>
+      <h2>{profile.role === "doctor" ? "Doctor" : "Patient"} Profile</h2>
       <div className="profile-card">
         <div className="profile-field">
           <label><FaUser /> Name:</label>
@@ -82,14 +91,30 @@ const ProfilePage = () => {
           <label><FaEnvelope /> Email:</label>
           <span>{profile.email}</span>
         </div>
-        <div className="profile-field">
-          <label><FaBirthdayCake /> Date of Birth:</label>
-          <span>{profile.date_of_birth}</span>
-        </div>
-        <div className="profile-field">
-          <label><FaVenusMars /> Gender:</label>
-          <span>{profile.gender}</span>
-        </div>
+        
+        {profile.role === "patient" ? (
+          <>
+            <div className="profile-field">
+              <label><FaBirthdayCake /> Date of Birth:</label>
+              <span>{profile.date_of_birth || "Not specified"}</span>
+            </div>
+            <div className="profile-field">
+              <label><FaVenusMars /> Gender:</label>
+              <span>{profile.gender || "Not specified"}</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="profile-field">
+              <label>Specialty:</label>
+              <span>{profile.specialty || "Not specified"}</span>
+            </div>
+            <div className="profile-field">
+              <label>Contact Info:</label>
+              <span>{profile.contact_info || "Not specified"}</span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
