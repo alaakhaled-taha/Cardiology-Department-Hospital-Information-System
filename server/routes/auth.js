@@ -43,27 +43,39 @@ router.post("/register/doctor", async (req, res) => {
 
 // Login (common for both)
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body; // role = "patient" or "doctor"
-  console.log("Login attempt with:", email); // Log the request
+  const { email, password } = req.body;
+  console.log("Login attempt with:", email);
+
   try {
-    const results = await Promise.all([
+    const [patient, doctor] = await Promise.all([
       Patient.findOne({ where: { email } }),
       Doctor.findOne({ where: { email } }),
     ]);
-    const [patient, doctor] = results;
+
     const user = patient || doctor;
     if (!user) {
-      console.error("can't find user");
-      //added
-      console.log("No user found with ID:", decoded.id);
-      return res.status(401).json({ error: "User not found"
-       /* success: false,
-        message: " failed",
-        details: "No user found with this email",*/
-      });
+      console.error("Can't find user");
+      return res.status(401).json({ error: "User not found" });
     }
 
     const role = patient ? "patient" : "doctor";
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.error("Password mismatch");
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: patient ? "patient" : "doctor",
+        email: user.email
+      },
+      "your_secret_key",
+      { expiresIn: "1h" }
+    );
+
     const userData = {
       id: user.id,
       email: user.email,
@@ -73,7 +85,6 @@ router.post("/login", async (req, res) => {
       updatedAt: user.updatedAt,
     };
 
-    // Add role-specific fields
     if (role === "doctor") {
       userData.specialty = user.specialty;
       userData.contactInfo = user.contact_info;
@@ -81,45 +92,14 @@ router.post("/login", async (req, res) => {
       userData.dateOfBirth = user.date_of_birth;
       userData.gender = user.gender;
     }
-    // let role="patient";
-    // let user = await Patient.findOne({ where: { email } });
-    // if (!user) {
-    //   // Check if the email exists in Doctor model
-    //   user = await Doctor.findOne({ where: { email } });
-    //   role = "doctor"; // If found in Doctor, set role as 'doctor'
-    //   }else {
-    //       return res.status(400).json({ error: 'Invalid role' });
-    //     }
 
-    if (!user) return res.status(401).json({ error: "User not found" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      console.error("password mismatch");
-      return res.status(401).json({
-        success: false,
-        message: "password failed",
-        details: "Incorrect password",
-      });
-    }
-
-    const token = jwt.sign(
-      { 
-         id: user.id,        
-         role: user.role,
-         email: user.email 
-        },
-      "your_secret_key",
-      {
-        expiresIn: "1h",
-      }
-    );
-
-    res.json({ token, user:userData });
+    res.json({ token, user: userData });
   } catch (error) {
+    console.error("Login error:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Get Profile (for both)
 router.get("/me", async (req, res) => {
