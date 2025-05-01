@@ -11,7 +11,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         setError("No token found. Please log in.");
         setLoading(false);
@@ -25,24 +25,15 @@ const ProfilePage = () => {
           },
         });
 
-        if (response.data.success) {
-          setProfile(response.data.user);
-        } else {
-          setError(response.data.error || "Failed to load profile");
-        }
+        // Log the profile data for inspection (remove after debugging)
+        console.log(response.data);
+        setProfile(response.data);
       } catch (err) {
-        console.error("Profile error:", {
-          message: err.message,
-          response: err.response?.data,
-          status: err.response?.status
-        });
-        
-        setError(
-          err.response?.data?.error || 
-          err.message || 
-          "Failed to load profile. Please try again."
-        );
-        
+        console.error("Profile error:", err); // Enhanced error logging
+
+        const errorMessage = err.response?.data?.error || err.message || "Failed to load profile. Please try again.";
+        setError(errorMessage);
+
         // If token is invalid, clear it
         if (err.response?.status === 401) {
           localStorage.removeItem("token");
@@ -91,7 +82,7 @@ const ProfilePage = () => {
           <label><FaEnvelope /> Email:</label>
           <span>{profile.email}</span>
         </div>
-        
+
         {profile.role === "patient" ? (
           <>
             <div className="profile-field">

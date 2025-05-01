@@ -65,10 +65,10 @@ router.post("/login", async (req, res) => {
       console.error("Password mismatch");
       return res.status(401).json({ error: "Incorrect password" });
     }
-
+    const id = patient ? user.patient_id : user.doctor_id;
     const token = jwt.sign(
       {
-        id: user.id,
+        id,
         role: patient ? "patient" : "doctor",
         email: user.email
       },
@@ -133,7 +133,7 @@ if (!user) return res.status(404).json({ error: "User not found" });
   }
 });
 //added
-// Temporary route for debugging
+
 router.get("/patients", async (req, res) => {
   try {
     const patients = await Patient.findAll();
