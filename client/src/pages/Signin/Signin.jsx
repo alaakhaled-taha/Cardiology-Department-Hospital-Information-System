@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,49 +5,52 @@ import axios from "axios";
 import "./Signin.css"; // We'll create this CSS file
 import { FaHeartbeat, FaUser, FaLock, FaSignInAlt } from "react-icons/fa"; // Import icons
 
-
 const SigninForm = () => {
   const [error, setError] = useState("");
-  const [isLoading,setIsLoading]=useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log('Data being sent to login:', data); 
-    console.log(data);  
+    console.log("Data being sent to login:", data);
+    console.log(data);
     setIsLoading(true);
     setError(null);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
 
-        data ,{
+        data,
+        {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
-      console.log("Login response data:", response.data); 
+      console.log("Login response data:", response.data);
       if (response.data.token) {
         console.log("Sign-In Successful!", response.data);
         alert("Login successful");
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        reset();
         navigate("/profile");
       } else {
         setError(response.data.message);
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                         err.response?.data?.details || 
-                         "Login failed. Please try again.";
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.data?.details ||
+        "Login failed. Please try again.";
       setError(errorMessage);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -119,8 +120,12 @@ const SigninForm = () => {
               )}
             </div>
 
-            <button type="submit" className="cardiology-btn" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Signin"}
+            <button
+              type="submit"
+              className="cardiology-btn"
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Signin"}
             </button>
           </form>
 

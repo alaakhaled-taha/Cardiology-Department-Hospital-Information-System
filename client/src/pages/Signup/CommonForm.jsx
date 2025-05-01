@@ -1,11 +1,23 @@
 import React from "react";
+import {
+  FaUser,
+  FaUserAlt,
+  FaEnvelope,
+  FaLock,
+  FaPhone,
+  FaPhoneAlt,
+  FaLandmark,
+  FaBirthdayCake,
+  FaVenusMars,
+  FaUpload,
+} from "react-icons/fa";
 
 const CommonForm = ({ register, errors, getValues }) => {
   return (
-    <div className="container mt-4 mb-3 ">
-      {/* <h2 className="text-center mb-4"></h2> */}
+    <div className="container mt-4 mb-3">
       <div className="mb-3">
-        <label htmlFor="first_name" className="form-label">
+        <label htmlFor="name" className="form-label">
+          <FaUser className="me-2" />
           First Name
         </label>
         <input
@@ -18,21 +30,19 @@ const CommonForm = ({ register, errors, getValues }) => {
           })}
           type="text"
           className="form-control"
-          id="first_name"
+          id="name"
         />
-        {errors.first_name && (
-          <p className="text-danger">{errors.first_name.message}</p>
-        )}
+        {errors.name && <p className="text-danger">{errors.name.message}</p>}
       </div>
 
       <div className="mb-3">
         <label htmlFor="last_name" className="form-label">
+          <FaUserAlt className="me-2" />
           Last Name
         </label>
         <input
           {...register("last_name", {
             required: "Last name is required",
-
             minLength: {
               value: 2,
               message: "Last name must be at least 2 characters long.",
@@ -49,13 +59,16 @@ const CommonForm = ({ register, errors, getValues }) => {
 
       <div className="mb-3">
         <label htmlFor="email" className="form-label">
+          <FaEnvelope className="me-2" />
           Email
         </label>
         <input
           {...register("email", {
             required: "Email is required",
-            pattern: /^[a-zA-Z0-9._-]+@gmail\.com$/,
-            message: "Please enter a valid Gmail address.",
+            pattern: {
+              value: /^[a-zA-Z0-9._-]+@gmail\.com$/,
+              message: "Please enter a valid Gmail address.",
+            },
           })}
           type="email"
           className="form-control"
@@ -67,6 +80,7 @@ const CommonForm = ({ register, errors, getValues }) => {
 
       <div className="mb-3">
         <label htmlFor="password" className="form-label">
+          <FaLock className="me-2" />
           Password
         </label>
         <input
@@ -85,6 +99,7 @@ const CommonForm = ({ register, errors, getValues }) => {
 
       <div className="mb-3">
         <label htmlFor="confirmPassword" className="form-label">
+          <FaLock className="me-2" />
           Confirm Password
         </label>
         <input
@@ -104,7 +119,8 @@ const CommonForm = ({ register, errors, getValues }) => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="phone_number" className="form-label">
+        <label htmlFor="primary_mobile" className="form-label">
+          <FaPhone className="me-2" />
           Phone Number
         </label>
         <input
@@ -113,27 +129,29 @@ const CommonForm = ({ register, errors, getValues }) => {
           })}
           type="tel"
           className="form-control"
-          id="phone_number"
+          id="primary_mobile"
         />
-        {errors.phone_number && (
-          <p className="text-danger">{errors.phone_number.message}</p>
+        {errors.primary_mobile && (
+          <p className="text-danger">{errors.primary_mobile.message}</p>
         )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="secondary_phone_number" className="form-label">
+        <label htmlFor="secondary_mobile" className="form-label">
+          <FaPhoneAlt className="me-2" />
           Secondary Phone Number
         </label>
         <input
           {...register("secondary_mobile")}
           type="tel"
           className="form-control"
-          id="secondary_phone_number"
+          id="secondary_mobile"
         />
       </div>
 
       <div className="mb-3">
         <label htmlFor="landline" className="form-label">
+          <FaLandmark className="me-2" />
           Landline
         </label>
         <input
@@ -146,6 +164,7 @@ const CommonForm = ({ register, errors, getValues }) => {
 
       <div className="mb-3">
         <label htmlFor="date_of_birth" className="form-label">
+          <FaBirthdayCake className="me-2" />
           Date of Birth
         </label>
         <input
@@ -163,6 +182,7 @@ const CommonForm = ({ register, errors, getValues }) => {
 
       <div className="mb-3">
         <label htmlFor="gender" className="form-label">
+          <FaVenusMars className="me-2" />
           Gender
         </label>
         <select
@@ -179,9 +199,9 @@ const CommonForm = ({ register, errors, getValues }) => {
         )}
       </div>
 
-      {/* Image Upload */}
       <div className="mb-3">
         <label htmlFor="profile_photo" className="form-label">
+          <FaUpload className="me-2" />
           Upload Image
         </label>
         <input
@@ -193,7 +213,9 @@ const CommonForm = ({ register, errors, getValues }) => {
           id="profile_photo"
           accept="image/*"
         />
-        {errors.image && <p className="text-danger">{errors.image.message}</p>}
+        {errors.profile_photo && (
+          <p className="text-danger">{errors.profile_photo.message}</p>
+        )}
       </div>
     </div>
   );

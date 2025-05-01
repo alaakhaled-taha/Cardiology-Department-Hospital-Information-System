@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -9,6 +7,8 @@ import PatientForm from "./PatientForm";
 import CommonForm from "./CommonForm";
 import { userTypes } from "../../enums/useType";
 import { Link } from "react-router-dom";
+
+import { FaUserMd, FaUserAlt } from "react-icons/fa";
 
 import "./Signup.css";
 
@@ -23,7 +23,7 @@ const SignupForm = () => {
     setError,
     watch,
   } = useForm({
-    mode: "onBlur", // Validate on blur for better UX
+    mode: "onBlur",
   });
 
   const [userType, setUserType] = React.useState("");
@@ -32,7 +32,6 @@ const SignupForm = () => {
 
   const handleRoleChange = (userType) => {
     setUserType(userType);
-    // Reset specialty if switching roles
     setValue("specialty", "");
     reset();
   };
@@ -43,9 +42,9 @@ const SignupForm = () => {
 
     let apiUrl;
     if (userType === userTypes.doctor) {
-      apiUrl = "http://localhost:5000/api/auth/register/doctor"; // URL for Doctor
+      apiUrl = "http://localhost:5000/api/auth/register/doctor"; //  for Doctor
     } else if (userType === userTypes.patient) {
-      apiUrl = "http://localhost:5000/api/auth/register/patient"; // URL for Patient
+      apiUrl = "http://localhost:5000/api/auth/register/patient"; // for Patient
     }
 
     try {
@@ -69,8 +68,7 @@ const SignupForm = () => {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-9 col-xl-7">
           <div className="card shadow-lg p-5 rounded">
-            {/* Updated color for Create Account */}
-            <h2 className="text-center mb-4">Create Account</h2>
+            <h2 className="text-center mb-4 ">Create Account</h2>
 
             <div
               className="card-body"
@@ -78,33 +76,30 @@ const SignupForm = () => {
             >
               <div className="form-section first-section d-flex justify-content-between align-items-center mb-1">
                 <div>
-                  <h6>Let's start with</h6>
+                  <h6 className="word">Let's start with</h6>
                   <h1 className="p-1">{userType && ` The ${userType}`}</h1>
                 </div>
 
-                {/* Role buttons */}
                 <div>
                   <div className="d-flex align-items-center">
                     <div className="vr mx-1"></div>
                     <div className="role-buttons d-flex">
                       <button
-                        className={`btn ${
-                          userType === userTypes.doctor
-                            ? "btn-info"
-                            : "btn-secondary"
+                        className={`role-btn ${
+                          userType === userTypes.doctor ? "selected" : ""
                         } mx-2`}
                         onClick={() => handleRoleChange(userTypes.doctor)}
                       >
+                        <FaUserMd className="me-2" />
                         Sign up as Doctor
                       </button>
                       <button
-                        className={`btn ${
-                          userType === userTypes.patient
-                            ? "btn-info"
-                            : "btn-secondary"
+                        className={`role-btn ${
+                          userType === userTypes.patient ? "selected" : ""
                         } mx-2`}
                         onClick={() => handleRoleChange(userTypes.patient)}
                       >
+                        <FaUserAlt className="me-2" />
                         Sign up as Patient
                       </button>
                     </div>
@@ -133,7 +128,6 @@ const SignupForm = () => {
                   </div>
                 )}
 
-                {/* Display server errors */}
                 {errors.root?.server && (
                   <div className="alert alert-danger mb-3">
                     {errors.root.server.message}
@@ -143,17 +137,18 @@ const SignupForm = () => {
                 <div className="text-center">
                   <button
                     type="submit"
-                    className="btn btn-primary w-100"
+                    className="selected role-btn w-100"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating Account..." : "Sign Up"}
                   </button>
                 </div>
                 <div className="text-center mt-3">
-                 <p>
-                   Already have an account? <Link to="/signin">Sign in here</Link>
-                </p>
-               </div>
+                  <p>
+                    Already have an account?{" "}
+                    <Link to="/signin">Sign in here</Link>
+                  </p>
+                </div>
               </form>
             </div>
           </div>

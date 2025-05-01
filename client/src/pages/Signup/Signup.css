@@ -1,77 +1,82 @@
-/* General Color Scheme */
 :root {
-    --primary-color: #032049; /* Dark blue from image */
-    --secondary-color: #eaf0f6; /* Gray color for the first part */
-    --highlight-color: #f6a800; /* Orange-like color for accents */
-  }
-  
-  body {
-    font-family: "Arial", sans-serif;
-  }
-  
-  /* Card styling */
-  .card {
-    background-color: #dcddde; /* Light background for the cards */
-  }
-  
-  /* Title section */
-  .card .d-flex h1 {
-    color: var(--primary-color);
-  }
-  
-  /* Button colors */
-  .btn-info {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
-  
-  .btn-info:hover {
-    background-color: var(--highlight-color);
-    border-color: var(--highlight-color);
-  }
-  
-  .btn-secondary {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-  }
-  
-  .btn-secondary:hover {
-    background-color: var(--highlight-color);
-    border-color: var(--highlight-color);
-  }
-  
-  /* Input fields styling */
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  input:focus {
-    border-color: var(--primary-color);
-  }
-  
-  /* First Section (Let's start with, buttons) */
-  .first-section {
-    background-color: var(--secondary-color); /* Background set to secondary color */
-    padding: 30px; /* Adjust padding to fit your design */
-    border-radius: 10px; /* Optional: add border radius to make the section rounded */
-    margin-bottom: 20px; /* Add margin below this section */
-  }
-  
-  /* Role buttons */
-  .role-buttons button {
-    padding: 12px 25px; /* Adjust button size */
-    font-size: 16px;
-    border-radius: 5px;
-    margin-right: 15px;
-  }
-  
-  /* Second Section (form fields) */
-  .card-body {
-    padding: 25px; /* Add padding to the second part */
-    background-color: white; /* Optional: change background color for form fields */
-  }
-  
+  --primary-color: #295baa;
+  --secondary-color: #eaf0f6;
+  --highlight-color: #4170b8;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+}
+
+.card {
+  background-color: #dcddde;
+}
+.word {
+  color: white;
+}
+/* Title  */
+.card .d-flex h1 {
+  color: var(--secondary-color);
+}
+
+.card-body {
+  padding: 25px;
+  background-color: white;
+}
+
+.role-btn {
+  color: black;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-right: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.role-btn.selected {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.role-btn:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: white;
+}
+
+.role-buttons button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-right: 15px;
+  color: black;
+}
+
+/* Input  */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+input:focus {
+  border-color: var(--primary-color);
+}
+
+.first-section {
+  background-color: var(--primary-color);
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--soft-blue);
+  margin-bottom: 8px;
+}

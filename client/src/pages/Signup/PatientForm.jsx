@@ -1,5 +1,6 @@
 import React from "react";
-// import { useForm } from "react-hook-form";
+import { FaUser, FaHeartbeat, FaStethoscope, FaMedkit } from "react-icons/fa"; // Importing from react-icons
+
 import { bloodTypes } from "../../enums/bloodTypes";
 
 const PatientForm = ({ register, errors }) => {
@@ -7,13 +8,15 @@ const PatientForm = ({ register, errors }) => {
     <div className="container my-5">
       <h2 className="text-center mb-4">Patient Medical History</h2>
 
-      {/* Section: Personal Information */}
       <div className="section-header mb-4">
-        <h4>Personal Information</h4>
+        <h4>
+          <FaUser className="me-2" /> Personal Information
+        </h4>
       </div>
 
       <div className="mb-3">
         <label htmlFor="parent_name" className="form-label">
+          <FaUser className="me-2" />
           Parent Name
         </label>
         <input
@@ -38,6 +41,7 @@ const PatientForm = ({ register, errors }) => {
 
       <div className="mb-3">
         <label htmlFor="spouse_name" className="form-label">
+          <FaUser className="me-2" />
           Spouse Name
         </label>
         <input
@@ -59,14 +63,15 @@ const PatientForm = ({ register, errors }) => {
         )}
       </div>
 
-      {/* Section: Health Information */}
       <div className="section-header mb-4">
-        <h4>Health Information</h4>
+        <h4>
+          <FaHeartbeat className="me-2" /> Health Information
+        </h4>
       </div>
 
-      {/* Blood Type */}
       <div className="mb-3">
         <label htmlFor="blood_type" className="form-label">
+          <FaHeartbeat className="me-2" />
           Blood Type
         </label>
         <select
@@ -90,9 +95,9 @@ const PatientForm = ({ register, errors }) => {
         )}
       </div>
 
-      {/* Smoking */}
       <div className="mb-3">
         <label htmlFor="is_smoker" className="form-label">
+          <FaStethoscope className="me-2" />
           Is the Patient a Smoker?
         </label>
         <select
@@ -113,14 +118,15 @@ const PatientForm = ({ register, errors }) => {
         )}
       </div>
 
-      {/* Section: */}
       <div className="section-header mb-4">
-        <h4>Insurance & Corporate Details</h4>
+        <h4>
+          <FaMedkit className="me-2" /> Insurance & Corporate Details
+        </h4>
       </div>
 
-      {/* Corporate Patient */}
       <div className="mb-3">
         <label htmlFor="is_corporate_patient" className="form-label">
+          <FaMedkit className="me-2" />
           Is Corporate Patient?
         </label>
         <select
@@ -145,9 +151,9 @@ const PatientForm = ({ register, errors }) => {
         )}
       </div>
 
-      {/* Insurance */}
       <div className="mb-3">
         <label htmlFor="has_insurance" className="form-label">
+          <FaMedkit className="me-2" />
           Does the Patient have Insurance?
         </label>
         <select

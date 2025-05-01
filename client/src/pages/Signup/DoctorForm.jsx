@@ -1,18 +1,15 @@
-// DoctorForm.js
-import React from 'react';
+import React from "react";
+import { FaUniversity, FaCalendarAlt, FaDollarSign } from "react-icons/fa";
 
 const DoctorForm = ({ register, errors }) => {
   return (
     <>
-      {/* Education Section */}
       <div className="container my-5">
-      <h2 className="text-center mb-4">Qualification</h2>
-      <div className="mb-3">
+        <h2 className="text-center mb-4">Qualification</h2>
 
-        {/* Medical University Name */}
         <div className="mb-3">
           <label htmlFor="university_name" className="form-label">
-            Medical University Name
+            <FaUniversity className="me-2" /> Medical University Name
           </label>
           <input
             {...register("university_name", {
@@ -27,10 +24,9 @@ const DoctorForm = ({ register, errors }) => {
           )}
         </div>
 
-        {/* Year of Graduation */}
         <div className="mb-3">
           <label htmlFor="graduation_year" className="form-label">
-            Year of Graduation
+            <FaCalendarAlt className="me-2" /> Year of Graduation
           </label>
           <input
             {...register("graduation_year", {
@@ -48,10 +44,9 @@ const DoctorForm = ({ register, errors }) => {
           )}
         </div>
 
-        {/* Salary per Session */}
         <div className="mb-3">
           <label htmlFor="salary_per_session" className="form-label">
-            Salary per Session
+            <FaDollarSign className="me-2" /> Salary per Session
           </label>
           <input
             {...register("salary_per_session", {
@@ -66,8 +61,7 @@ const DoctorForm = ({ register, errors }) => {
             <p className="text-danger">{errors.salary_per_session.message}</p>
           )}
         </div>
-        </div>
-        </div>
+      </div>
     </>
   );
 };
