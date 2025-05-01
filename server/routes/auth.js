@@ -88,6 +88,7 @@ router.post("/login", async (req, res) => {
     if (role === "doctor") {
       userData.specialty = user.specialty;
       userData.contactInfo = user.contact_info;
+      userData.gender = user.gender;
     } else {
       userData.dateOfBirth = user.date_of_birth;
       userData.gender = user.gender;
@@ -102,7 +103,7 @@ router.post("/login", async (req, res) => {
 
 
 // Get Profile (for both)
-router.get("/me", async (req, res) => {
+/*router.get("/me", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "No token provided" });
 
@@ -154,7 +155,56 @@ router.get("/doctors/cardiology", async (req, res) => {
     console.error("Error fetching Cardiology doctors:", error);
     res.status(500).json({ error: "Failed to load doctors" });
   }
+});*/
+router.get("/me", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, "your_secret_key");
+    let user;
+
+    if (decoded.role === "patient") {
+      user = await Patient.findByPk(decoded.id);
+    } else if (decoded.role === "doctor") {
+      user = await Doctor.findByPk(decoded.id);
+    } else {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const userProfile = {
+      id: user.id,
+      name: user.name, // NOT user.fullName
+      email: user.email,
+      gender: user.gender,
+      contact_info: user.contact_info, // NOT user.phoneNumber
+      profile_picture_url: user.profile_picture_url, // NOT user.profilePicture
+      role: decoded.role,
+      ...(decoded.role === "patient" ? {
+          date_of_birth: user.date_of_birth,
+          blood_group: user.blood_group,
+          address: user.address,
+          parent_name: user.parent_name,
+          spouse_name: user.spouse_name,
+          is_corporate: user.is_corporate,
+          has_insurance: user.has_insurance,
+          is_smoker: user.is_smoker
+      } : {
+          specialty: user.specialty,
+          salary_per_session: user.salary_per_session,
+          no_of_appointments: user.no_of_appointments
+      })
+    };
+
+    res.json(userProfile);
+  } catch (error) {
+    console.error("JWT error:", error.message);
+    res.status(401).json({ error: "Invalid token" });
+  }
 });
+
 
 
 module.exports = router;
