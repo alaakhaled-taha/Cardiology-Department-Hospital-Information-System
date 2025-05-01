@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import logo from "../../assets/logo3.png";
 
@@ -17,11 +18,15 @@ function Header() {
         <ul>
           <li><a href="#">About Us</a></li>
           <li><a href="#">Locations</a></li>
-          <li className="dropdown" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
+          <li
+            className="dropdown"
+            onMouseEnter={toggleDropdown}
+            onMouseLeave={toggleDropdown}
+          >
             <a href="#">Departments</a>
             {dropdownVisible && (
               <ul className="dropdown-menu">
-                <li><a href="#">Cardiology</a></li>
+                <li><Link to="/departments/cardiology">Cardiology</Link></li>
                 <li><a href="#">Radiology</a></li>
                 <li><a href="#">Surgery</a></li>
                 <li><a href="#">Emergency</a></li>
