@@ -43,6 +43,9 @@ const SignupForm = () => {
     let apiUrl;
     if (userType === userTypes.doctor) {
       apiUrl = "http://localhost:5000/api/auth/register/doctor"; //  for Doctor
+      if (data.salary_per_session) {
+        localStorage.setItem("salary_per_session", data.salary_per_session);
+      }
     } else if (userType === userTypes.patient) {
       apiUrl = "http://localhost:5000/api/auth/register/patient"; // for Patient
     }
@@ -51,7 +54,7 @@ const SignupForm = () => {
       const res = await axios.post(apiUrl, formData);
       console.log(res);
       alert("Account created successfully!");
-      navigate("/profile");
+      navigate("/signin");
     } catch (err) {
       console.error(err);
       setError("root.server", {
