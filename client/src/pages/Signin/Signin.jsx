@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import axios from "axios";
 import "./Signin.css"; // We'll create this CSS file
 import { FaHeartbeat, FaUser, FaLock, FaSignInAlt } from "react-icons/fa"; // Import icons
@@ -35,7 +36,9 @@ const SigninForm = () => {
       console.log("Login response data:", response.data);
       if (response.data.token) {
         console.log("Sign-In Successful!", response.data);
-        alert("Login successful");
+        toast.success("Login successful", {
+          className: "toast-success-custom ",
+        });
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         reset();

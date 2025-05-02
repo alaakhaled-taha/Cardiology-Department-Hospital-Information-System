@@ -1,12 +1,37 @@
 import React from "react";
-import { FaUniversity, FaCalendarAlt, FaDollarSign } from "react-icons/fa";
+import {specialties } from "../../enums/specialties"
+import { FaUniversity, FaCalendarAlt, FaDollarSign ,FaStethoscope} from "react-icons/fa";
 
 const DoctorForm = ({ register, errors }) => {
   return (
     <>
       <div className="container my-5">
         <h2 className="text-center mb-4">Qualification</h2>
-
+        <div className="mb-3">
+          <label htmlFor="specialty" className="form-label">
+            <FaStethoscope className="me-2" />
+            Specialty
+          </label>
+          <select
+            id="specialty"
+            className={`form-control ${errors.specialty ? "is-invalid" : ""}`}
+            {...register("specialty", { required: "This field is required" })}
+          >
+            <option value="" disabled selected>
+              Select Specialty
+            </option>
+            {specialties.map((spec) => (
+              <option key={spec} value={spec}>
+                {spec}
+              </option>
+            ))}
+          </select>
+          {errors.specialty && (
+            <div className="invalid-feedback text-danger">
+              {errors.specialty.message}
+            </div>
+          )}
+        </div>
         <div className="mb-3">
           <label htmlFor="university_name" className="form-label">
             <FaUniversity className="me-2" /> Medical University Name
