@@ -59,6 +59,7 @@ router.put('/update', async (req, res) => {
         } else {
             return res.status(400).json({ error: 'Invalid role' });
         }
+delete updates.role;
 
         // Validate fields
         if (Object.keys(updates).length === 0) {
