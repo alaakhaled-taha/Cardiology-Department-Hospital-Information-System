@@ -35,4 +35,60 @@ router.get('/me', async (req, res) => {
         res.status(401).json({ error: 'Invalid token' });
     }
 });
+
+
+
+//added
+router.put('/update', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: 'No token provided' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        const updates = req.body;
+
+        let table, idColumn, userId;
+        if (decoded.role === 'patient') {
+            table = 'patients';
+            idColumn = 'patient_id';
+            userId = decoded.id;
+        } else if (decoded.role === 'doctor') {
+            table = 'doctors';
+            idColumn = 'doctor_id';
+            userId = decoded.id;
+        } else {
+            return res.status(400).json({ error: 'Invalid role' });
+        }
+
+        // Validate fields
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        // Build dynamic SET clause
+        const fields = Object.keys(updates);
+        const values = Object.values(updates);
+        const setClause = fields.map((field, index) => `${field} = ?`).join(', ');
+
+        const query = `UPDATE ${table} SET ${setClause} WHERE ${idColumn} = ?`;
+
+        await sequelize.query(query, {
+            replacements: [...values, userId],
+            type: QueryTypes.UPDATE,
+        });
+
+        res.json({ message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error("Update error:", error);
+        res.status(500).json({ error: 'Failed to update profile' });
+    }
+});
+
+
+
+
+
+
+
+
 module.exports = router;
