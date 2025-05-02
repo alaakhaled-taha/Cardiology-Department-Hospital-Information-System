@@ -48,24 +48,28 @@ const SignupForm = () => {
       }
     });
     formData.append("userType", userType);
-  
+
     setIsSubmitting(true);
-  
+
     const apiUrl =
       userType === userTypes.doctor
         ? "http://localhost:5000/api/auth/register/doctor"
         : "http://localhost:5000/api/auth/register/patient";
-  
+
     try {
       const res = await axios.post(apiUrl, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       console.log(res);
       toast.success("Account created successfully!");
+<<<<<<< HEAD
      // navigate("/profile");
      alert("login successful");
      navigate("/signin");
+=======
+      navigate("/signin");
+>>>>>>> aae7693b7657fcbadae9a268916cc58accb27a9a
     } catch (err) {
       console.error("Signup error:", err);
       setError("root.server", {
