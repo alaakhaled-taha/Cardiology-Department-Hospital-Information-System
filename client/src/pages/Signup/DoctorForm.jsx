@@ -52,7 +52,11 @@ const DoctorForm = ({ register, errors }) => {
             {...register("salary_per_session", {
               required: "Salary per session is required",
               pattern: /^\d+(\.\d{1,2})?$/, // Matches decimal numbers (e.g. 100.50)
+              validate: (value) =>
+                parseFloat(value) >= 0 || "Value must be non-negative",
             })}
+            min="0"
+            step="200"
             type="number"
             className="form-control"
             id="salary_per_session"

@@ -70,14 +70,14 @@ const PatientForm = ({ register, errors }) => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="blood_type" className="form-label">
+        <label htmlFor="blood_group" className="form-label">
           <FaHeartbeat className="me-2" />
           Blood Type
         </label>
         <select
-          id="blood_type"
-          className={`form-control ${errors.blood_type ? "is-invalid" : ""}`}
-          {...register("blood_type", { required: "This field is required" })}
+          id="blood_group"
+          className={`form-control ${errors.blood_group ? "is-invalid" : ""}`}
+          {...register("blood_group", { required: "This field is required" })}
         >
           <option value="" disabled selected>
             Select Blood Type
@@ -88,9 +88,9 @@ const PatientForm = ({ register, errors }) => {
             </option>
           ))}
         </select>
-        {errors.blood_type && (
+        {errors.blood_group && (
           <div className="invalid-feedback text-danger">
-            {errors.blood_type.message}
+            {errors.blood_group.message}
           </div>
         )}
       </div>

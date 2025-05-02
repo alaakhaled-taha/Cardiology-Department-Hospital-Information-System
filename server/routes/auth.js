@@ -231,8 +231,9 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Get Profile (for both)
-/*router.get("/me", async (req, res) => {
+router.get("/me", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "No token provided" });
 
@@ -284,7 +285,7 @@ router.get("/doctors/cardiology", async (req, res) => {
     console.error("Error fetching Cardiology doctors:", error);
     res.status(500).json({ error: "Failed to load doctors" });
   }
-});*/
+});
 
 router.get('/me', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];

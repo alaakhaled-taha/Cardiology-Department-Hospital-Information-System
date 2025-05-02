@@ -26,8 +26,8 @@ function CardiologyPage() {
 
   const handleBookAppointment = (doctorId) => {
     const token = localStorage.getItem("token");
-      alert("Please sign in to book an appointment.");
-      navigate("/Signin");
+    alert("Please sign in to book an appointment.");
+    navigate("/Signin");
   };
 
   return (
@@ -38,15 +38,21 @@ function CardiologyPage() {
         <div className="doctor-card-list">
           {doctors.map((doctor) => (
             <div key={doctor.doctor_id} className="doctor-card">
-               <img
-    src={`http://localhost:5000/uploads/${doctor.profile_photo}`}
-    alt={`${doctor.name}'s profile`}
-    className="doctor-photo"
-  />
+              <img
+                src={`http://localhost:5000/uploads/${doctor.profile_photo}`}
+                alt={`${doctor.name}'s profile`}
+                className="doctor-photo"
+              />
               <h4>{doctor.name}</h4>
-              <p><strong>Specialty:</strong> {doctor.specialty}</p>
-              <p><strong>Email:</strong> {doctor.email}</p>
-              <p><strong>Contact:</strong> {doctor.contact_info}</p>
+              <p>
+                <strong>Specialty:</strong> {doctor.specialty}
+              </p>
+              <p>
+                <strong>Email:</strong> {doctor.email}
+              </p>
+              <p>
+                <strong>Contact:</strong> {doctor.contact_info}
+              </p>
               <button
                 className="book-btn"
                 onClick={() => handleBookAppointment(doctor.doctor_id)}
