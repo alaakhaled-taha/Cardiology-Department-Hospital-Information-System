@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./Profile.css";
 import {
@@ -13,7 +13,8 @@ import {
   FaBriefcaseMedical,
   FaHeartbeat,
   FaSyringe,
-  FaMoneyBillWave
+  FaMoneyBillWave,
+  FaBars,
 } from "react-icons/fa";
 
 const Profile = () => {
@@ -22,6 +23,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
+  const [menuOpen, setMenuOpen] = useState(false);
+  const drawerRef = useRef(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -37,9 +40,7 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(response.data);
-        //added
-        setEditedProfile(response.data); 
-
+        setEditedProfile(response.data);
       } catch (err) {
         setError(err.response?.data?.error || "Failed to load profile.");
         if (err.response?.status === 401) {
@@ -53,7 +54,21 @@ const Profile = () => {
     fetchProfile();
   }, []);
 
-  //added
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
 
   const handleChange = (field, value) => {
     setEditedProfile((prev) => ({ ...prev, [field]: value }));
@@ -62,93 +77,90 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-        await axios.put("http://localhost:5000/api/auth/update", editedProfile, {
+      await axios.put("http://localhost:5000/api/auth/update", editedProfile, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-//added
-const response = await axios.get("http://localhost:5000/api/auth/me", {
-  headers: { Authorization: `Bearer ${token}` },
-});
+      const response = await axios.get("http://localhost:5000/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setProfile(response.data);
       setEditedProfile(response.data);
       setEditMode(false);
-      setError(""); 
+      setError("");
     } catch (err) {
       console.error("Update failed:", err.response?.data || err.message);
       setError(err.response?.data?.error || "Failed to update profile.");
     }
   };
-//added
 
-const renderField = (label, icon, field, isBoolean = false) => (
-  <div className="profile-field">
-    <label>{icon} {label}</label>
-    {editMode ? (
-      <input
-        type="text"
-        value={editedProfile[field] ?? ""}
-        onChange={(e) => handleChange(field, e.target.value)}
-      />
-    ) : (
-      <span>
-        {isBoolean
-          ? (profile[field] ? "Yes" : "No")
-          : profile[field] ?? "N/A"}
-      </span>
-    )}
-  </div>
-);
+  const renderField = (label, icon, field, isBoolean = false) => (
+    <div className="profile-field">
+      <label>
+        {icon} {label}
+      </label>
+      {editMode ? (
+        <input
+          type="text"
+          value={editedProfile[field] ?? ""}
+          onChange={(e) => handleChange(field, e.target.value)}
+        />
+      ) : (
+        <span>
+          {isBoolean ? (profile[field] ? "Yes" : "No") : profile[field] ?? "N/A"}
+        </span>
+      )}
+    </div>
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="error">{error}</div>;
   if (!profile) return <div>No profile data found.</div>;
 
+  return (
+    <div className="profile-wrapper">
+      <div className="header">
+        <h2>Profile</h2>
+        <FaBars className="menu-icon" onClick={() => setMenuOpen(!menuOpen)} />
+      </div>
 
+      <div className="drawer" ref={drawerRef} style={{ right: menuOpen ? "0" : "-240px" }}>
+        <ul>
+          <li className="active">
+            <FaUser style={{ marginRight: "8px" }} /> Profile
+          </li>
+          <li>
+            <FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard
+          </li>
+          <li>
+            <FaHeartbeat style={{ marginRight: "8px" }} /> Settings
+          </li>
+        </ul>
+      </div>
 
-return (
-  <div className="profile-wrapper">
-    {/* Sidebar */}
-    <div className="sidebar">
-      <ul>
-        <li className="active"><FaUser style={{ marginRight: "8px" }} /> Profile</li>
-        <li><FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard</li>
-        <li><FaHeartbeat style={{ marginRight: "8px" }} /> Settings</li>
-      </ul>
-    </div>
-
-    {/* Profile Main */}
-    <div className="profile-main">
-      <div className="profile-top">
+      <div className="profile-main">
         <div className="photo-section">
           <img
-            src={profile.profile_photo ? `http://localhost:5000${profile.profile_photo}` : "/default-profile.png"}
+            src={
+              profile.profile_photo
+                ? `http://localhost:5000${profile.profile_photo}`
+                : "/default-profile.png"
+            }
             alt="Profile"
             className="profile-pic"
           />
           <h3 className="profile-name">{profile.name}</h3>
         </div>
-      </div>
-      <h1 className="profile-title">{profile.role === "patient" ? "Patient Profile" : "Doctor Profile"}</h1>
 
- 
-      {/* Edit/Save button */}
-     <div style={{ textAlign: "right", marginBottom: "1rem" }}>
-      <button type="button" onClick={() => editMode ? handleSave() : setEditMode(true)}>
-       {editMode ? "Save" : "Edit"}
-       </button>
-      </div>
+        <h1 className="profile-title">
+          {profile.role === "patient" ? "Patient Profile" : "Doctor Profile"}
+        </h1>
 
-      {/* Profile Form */}
-      <form className="profile-form">
-        <div className="profile-card">
-
-          {/* Common Fields */}
-          <h2>General Information</h2>
-
-          
-          {renderField("Full Name", <FaUser />, "name")}
+        <form className="profile-form">
+          <div className="profile-card">
+            <h2>General Information</h2>
+            {renderField("Full Name", <FaUser />, "name")}
             {renderField("Email", <FaEnvelope />, "email")}
 
             {profile.role === "patient" ? (
@@ -181,9 +193,14 @@ return (
           </div>
         </form>
       </div>
+
+      <div className="edit-button-fixed">
+        <button type="button" onClick={() => (editMode ? handleSave() : setEditMode(true))}>
+          {editMode ? "Save Changes" : "Edit Profile"}
+        </button>
+      </div>
     </div>
   );
 };
-         
 
 export default Profile;

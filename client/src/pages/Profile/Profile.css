@@ -1,38 +1,68 @@
 .profile-wrapper {
-  display: flex;
   font-family: sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
 }
 
-.sidebar {
-  background-color: #1e3a8a; /* blue-800 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e3a8a;
   color: white;
-  width: 200px;
-  padding: 1rem;
-  height: 250vh;
+  padding: 1rem 2rem;
+  position: relative;
 }
 
-.sidebar ul {
+.menu-icon {
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.menu-icon:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: -240px;
+  width: 240px;
+  height: 100%;
+  background-color: #1e3a8a;
+  color: white;
+  transition: right 0.3s ease;
+  padding: 2rem 1rem;
+  z-index: 1000;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.drawer ul {
   list-style: none;
   padding: 0;
 }
 
-.sidebar li {
+.drawer li {
   margin: 1rem 0;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   cursor: pointer;
 }
 
-.sidebar li.active {
+.drawer li.active {
   font-weight: bold;
   text-decoration: underline;
 }
 
 .profile-main {
-  flex: 1;
   padding: 2rem;
-  background-color: #f9fafb; /* gray-50 */
+  max-width: 1000px;
+  margin: auto;
 }
 
 .photo-section {
@@ -64,6 +94,8 @@
 .profile-title {
   margin: 2rem 0;
   font-size: 2rem;
+  text-align: center;
+  color: #1f2937;
 }
 
 .profile-form .profile-card {
@@ -90,16 +122,31 @@
   border-radius: 4px;
 }
 
-.edit-buttons button {
-  margin-right: 1rem;
-  padding: 0.5rem 1.2rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #1e3a8a;
-  color: white;
-  cursor: pointer;
+.edit-button-fixed {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1001;
 }
 
-.edit-buttons button:hover {
+.edit-button-fixed button {
+  padding: 0.75rem 1.5rem;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.edit-button-fixed button:hover {
   background-color: #3b82f6;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
 }

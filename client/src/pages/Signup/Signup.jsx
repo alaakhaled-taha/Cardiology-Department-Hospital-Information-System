@@ -63,7 +63,7 @@ const SignupForm = () => {
   
       console.log(res);
       toast.success("Account created successfully!");
-      navigate("/profile");
+      navigate("/Signin");
     } catch (err) {
       console.error("Signup error:", err);
       setError("root.server", {
