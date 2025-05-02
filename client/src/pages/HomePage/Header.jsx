@@ -16,8 +16,8 @@ function Header() {
       <h1></h1>
       <nav>
         <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Locations</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/AboutUs">About Us</a></li>
           <li
             className="dropdown"
             onMouseEnter={toggleDropdown}
@@ -38,6 +38,7 @@ function Header() {
             )}
           </li>
           <li><a href="#">Contact Us</a></li>
+          <li><a href="/Signin">Sign in</a></li>
         </ul>
       </nav>
     </header>
