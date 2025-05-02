@@ -26,6 +26,7 @@ function CardiologyPage() {
 
   const handleBookAppointment = (doctorId) => {
     const token = localStorage.getItem("token");
+    console.log(token, doctorId);
     alert("Please sign in to book an appointment.");
     navigate("/Signin");
   };
@@ -36,27 +37,32 @@ function CardiologyPage() {
       <div className="cardiology-page-container">
         <h2 className="cardiology-title">Meet Our Cardiology Doctors</h2>
         <div className="doctor-card-list">
-  {doctors.map((doctor) => (
-    <div key={doctor.doctor_id} className="doctor-card">
-      <img
-        src={`http://localhost:5000${doctor.profile_photo}`}
-        alt={`${doctor.name}'s profile`}
-        className="doctor-photo"
-      />
-      <h4>{doctor.name}</h4>
-      <p><strong>Specialty:</strong> {doctor.specialty}</p>
-      <p><strong>Email:</strong> {doctor.email}</p>
-      <p><strong>Contact:</strong> {doctor.contact_info}</p>
-      <button
-        className="book-btn"
-        onClick={() => handleBookAppointment(doctor.doctor_id)}
-      >
-        Book Appointment
-      </button>
-    </div>
-  ))}
-</div>
-
+          {doctors.map((doctor) => (
+            <div key={doctor.doctor_id} className="doctor-card">
+              <img
+                src={`http://localhost:5000${doctor.profile_photo}`}
+                alt={`${doctor.name}'s profile`}
+                className="doctor-photo"
+              />
+              <h4>{doctor.name}</h4>
+              <p>
+                <strong>Specialty:</strong> {doctor.specialty}
+              </p>
+              <p>
+                <strong>Email:</strong> {doctor.email}
+              </p>
+              <p>
+                <strong>Contact:</strong> {doctor.contact_info}
+              </p>
+              <button
+                className="book-btn"
+                onClick={() => handleBookAppointment(doctor.doctor_id)}
+              >
+                Book Appointment
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
       <Footer />
     </div>
