@@ -6,6 +6,8 @@ const multer = require('multer'); // Import multer for file uploads
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
+const profileRoute = require('./user/profile')
+const doctorRoute = require('./routes/doctor')
 const { sequelize } = require('./models');
 
 const app = express();
@@ -56,6 +58,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', profileRoute);
+app.use('/api/auth', doctorRoute);
 
 // Route for file upload
 app.post('/api/upload/profile-photo', upload.single('profile_photo'), (req, res) => {
