@@ -12,35 +12,22 @@ const fs = require('fs');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 //APIs for registeration of patient and doctor
 const patient_register = async (req, res) => {
-    const { name,
-        date_of_birth,
-        gender,
-        blood_group,
-        referred_by,
-        primary_mobile,
-        secondary_mobile,
-        landline,
-        email,
-        address,
-        parent_name,
-        spouse_name,
-        is_corporate_patient,
-        has_insurance,
-        is_smoker,
-        password,
-        last_name } = req.body;
-    const profile_photo = req.file?.filename
-        ? `/uploads/${req.file.filename}`
-        : null;
+    console.log('Body:', req.body);
+    console.log('File:', req.file);  // Log the file to ensure multer is processing it
 
-    const old_patient = await sequelize.query('SELECT * FROM patients WHERE email = ?', {
-        replacements: [email],
-        type: QueryTypes.SELECT,
-    });
-    if (old_patient.length > 0) {
-        return res.status(400).json({ massage: "E-mail is already exist" })
-    }
+    const { name, date_of_birth, gender, blood_group, referred_by, primary_mobile, secondary_mobile, landline, email, address, parent_name, spouse_name, is_corporate_patient, has_insurance, is_smoker, password, last_name } = req.body;
+    const profile_photo = req.file?.filename ? `/uploads/${req.file.filename}` : null;
+
     try {
+        const old_patient = await sequelize.query('SELECT * FROM patients WHERE email = ?', {
+            replacements: [email],
+            type: QueryTypes.SELECT,
+        });
+
+        if (old_patient.length > 0) {
+            return res.status(400).json({ message: "E-mail already exists" });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const newPatient = await Patient.create({
             name,
@@ -59,42 +46,36 @@ const patient_register = async (req, res) => {
             has_insurance,
             is_smoker,
             password: hashedPassword,
-            profile_photo: profile_photo,
+            profile_photo,
             last_name
         });
 
         res.status(201).json({ message: 'Patient created successfully!' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error in patient registration:', error);  // Log the error
+        res.status(500).json({ error: error.message });
     }
 };
 
+
 const doctor_register = async (req, res) => {
-    const { name,
-        email,
-        password,
-        specialty,
-        primary_mobile,
-        last_name,
-        gender,
-        secondary_mobile,
-        landline,
-        university_name,
-        graduation_year,
-        salary_per_session
-    } = req.body;
-    // const profile_photo = req.file?.filename || null;
-    const profile_photo = req.file?.filename
-        ? `/uploads/${req.file.filename}`
-        : null;
-    const old_doctor = await sequelize.query('SELECT * FROM doctors WHERE email = ?', {
-        replacements: [email],
-        type: QueryTypes.SELECT,
-    });
-    if (old_doctor.length > 0) {
-        return res.status(400).json({ massage: "E-mail is already exist" });
-    }
+    console.log('Body:', req.body);
+    console.log('File:', req.file);
+
+    const { name, email, password, specialty, primary_mobile, last_name, gender, secondary_mobile, landline, university_name, graduation_year, salary_per_session } = req.body;
+    const profile_photo = req.file?.filename ? `/uploads/${req.file.filename}` : null;
+
     try {
+        // Check if doctor email already exists
+        const old_doctor = await sequelize.query('SELECT * FROM doctors WHERE email = ?', {
+            replacements: [email],
+            type: QueryTypes.SELECT,
+        });
+
+        if (old_doctor.length > 0) {
+            return res.status(400).json({ message: "E-mail already exists" });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const newDoctor = await Doctor.create({
             name,
@@ -102,7 +83,7 @@ const doctor_register = async (req, res) => {
             password: hashedPassword,
             specialty,
             contact_info: primary_mobile,
-            profile_photo: profile_photo,
+            profile_photo,
             last_name,
             gender,
             secondary_mobile,
@@ -112,11 +93,13 @@ const doctor_register = async (req, res) => {
             salary_per_session
         });
 
-        res.status(201).json({ message: 'doctor created successfully!' });
+        res.status(201).json({ message: 'Doctor created successfully!' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error in doctor registration:', error);  // Log the error for better analysis
+        res.status(500).json({ error: error.message });
     }
 };
+
 //API for login as patient or doctor
 const login = async (req, res) => {
     const { email, password } = req.body;

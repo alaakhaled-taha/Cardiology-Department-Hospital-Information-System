@@ -29,7 +29,7 @@ const SignupForm = () => {
 
   const [userType, setUserType] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   const handleRoleChange = (userType) => {
     setUserType(userType);
@@ -38,29 +38,35 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (data) => {
-    const formData = { ...data, userType };
-    setIsSubmitting(true);
+    const formData = new FormData();
 
-    let apiUrl;
-    if (userType === userTypes.doctor) {
-      apiUrl = "http://localhost:5000/api/auth/register/doctor"; //  for Doctor
-      if (data.salary_per_session) {
-        localStorage.setItem("salary_per_session", data.salary_per_session);
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "profile_photo") {
+        formData.append(key, value[0]);
+      } else {
+        formData.append(key, value);
       }
-    } else if (userType === userTypes.patient) {
-      apiUrl = "http://localhost:5000/api/auth/register/patient"; // for Patient
-    }
-
+    });
+    formData.append("userType", userType);
+  
+    setIsSubmitting(true);
+  
+    const apiUrl =
+      userType === userTypes.doctor
+        ? "http://localhost:5000/api/auth/register/doctor"
+        : "http://localhost:5000/api/auth/register/patient";
+  
     try {
-      const res = await axios.post(apiUrl, formData);
-      console.log(res);
-      console.log(formData);
-      toast.success("Login successful",{
-        className: "toast-success-custom",
+      // ➡️ Tell Axios this is multipart
+      const res = await axios.post(apiUrl, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+  
+      console.log(res);
+      toast.success("Account created successfully!");
       navigate("/profile");
     } catch (err) {
-      console.error(err);
+      console.error("Signup error:", err);
       setError("root.server", {
         type: "manual",
         message: err.response?.data?.message || "Something went wrong",
