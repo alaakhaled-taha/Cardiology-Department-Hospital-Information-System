@@ -175,8 +175,13 @@ return (
               <>
                 <h2>Professional Details</h2>
                 {renderField("Specialty", <FaUserFriends />, "specialty")}
+                {renderField("Gender", <FaVenusMars />, "gender")}
+                {renderField("University Name", <FaBriefcaseMedical />, "university_name")}
+                {renderField("Graduation Year", <FaBirthdayCake />, "graduation_year")}
                 {renderField("Salary per Session", <FaMoneyBillWave />, "salary_per_session")}
+                {renderField("Contact Info", <FaPhoneAlt />, "contact_info")}
               </>
+               
             )}
           </div>
         </form>
