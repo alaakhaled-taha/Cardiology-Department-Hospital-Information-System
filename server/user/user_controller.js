@@ -95,7 +95,7 @@ const doctor_register = async (req, res) => {
 
         res.status(201).json({ message: 'Doctor created successfully!' });
     } catch (error) {
-        console.error('Error in doctor registration:', error);  // Log the error for better analysis
+        console.error('Error in doctor registration:', error);
         res.status(500).json({ error: error.message });
     }
 };

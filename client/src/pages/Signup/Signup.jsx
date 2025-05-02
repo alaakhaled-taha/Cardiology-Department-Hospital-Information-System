@@ -57,7 +57,6 @@ const SignupForm = () => {
         : "http://localhost:5000/api/auth/register/patient";
   
     try {
-      // ➡️ Tell Axios this is multipart
       const res = await axios.post(apiUrl, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
