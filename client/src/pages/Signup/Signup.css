@@ -24,15 +24,11 @@ body {
   background-color: white;
 }
 
-
-
 /* For an even more dramatic colored shadow */
-.card-shadow-primary-xl{
-  box-shadow: 
-    0 20px 25px 6px rgba(65, 104, 168, 0.4),
+.card-shadow-primary-xl {
+  box-shadow: 0 20px 25px 6px rgba(65, 104, 168, 0.4),
     0 10px 10px 1px rgba(20, 35, 59, 0.2);
 }
-
 
 .role-btn {
   color: black;
@@ -89,4 +85,11 @@ label {
   gap: 8px;
   color: var(--soft-blue);
   margin-bottom: 8px;
+}
+
+/* Add this to your CSS file (e.g., App.css) */
+.toast-success-custom {
+  --toastify-color-success: var(--primary-color);
+  --toastify-icon-color-success: var(--primary-color);
+  --toastify-color-progress-success: var(--primary-color);
 }

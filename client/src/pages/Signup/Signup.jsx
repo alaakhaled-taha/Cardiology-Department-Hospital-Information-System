@@ -54,7 +54,10 @@ const SignupForm = () => {
     try {
       const res = await axios.post(apiUrl, formData);
       console.log(res);
-      toast.success("Login successful");
+      console.log(formData);
+      toast.success("Login successful",{
+        className: "toast-success-custom",
+      });
       navigate("/profile");
     } catch (err) {
       console.error(err);

@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <>
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={2000} />
       <Router>
         <Routes>
           <Route path="/" element={<Homepage />} />

@@ -41,3 +41,12 @@
   font-size: 1rem;
   z-index: 10;
 }
+
+/* Add this to your CSS file (e.g., App.css) */
+.toast-success-custom {
+  background-color: #3cb371 !important; /* your custom green */
+  font-size: 14px; /* smaller text */
+  padding: 8px 12px; /* smaller padding */
+  min-height: auto; /* smaller height */
+  border-radius: 6px;
+}

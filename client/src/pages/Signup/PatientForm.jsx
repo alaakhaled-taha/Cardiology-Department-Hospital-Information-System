@@ -87,6 +87,31 @@ const PatientForm = ({ register, errors }) => {
       </div>
 
       <div className="mb-3">
+        <label htmlFor="address" className="form-label">
+          <FaUser className="me-2" />
+          Address
+        </label>
+        <input
+          type="text"
+          id="address"
+          className={`form-control ${errors.address ? "is-invalid" : ""}`}
+          {...register("address", {
+            required: "Address is required",
+            maxLength: {
+              value: 200,
+              message: "Address cannot exceed 200 characters",
+            },
+          })}
+          placeholder="Enter your address"
+        />
+        {errors.address && (
+          <div className="invalid-feedback text-danger">
+            {errors.address.message}
+          </div>
+        )}
+      </div>
+
+      <div className="mb-3">
         <label htmlFor="date_of_birth" className="form-label">
           <FaBirthdayCake className="me-2" />
           Date of Birth

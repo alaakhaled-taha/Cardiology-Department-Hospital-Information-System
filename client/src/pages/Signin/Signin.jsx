@@ -36,7 +36,9 @@ const SigninForm = () => {
       console.log("Login response data:", response.data);
       if (response.data.token) {
         console.log("Sign-In Successful!", response.data);
-        toast.success("Login successful");
+        toast.success("Login successful", {
+          className: "toast-success-custom ",
+        });
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         reset();

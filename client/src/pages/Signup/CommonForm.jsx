@@ -86,6 +86,16 @@ const CommonForm = ({ register, errors, getValues }) => {
         <input
           {...register("password", {
             required: "Password is required",
+            //   minLength: {
+            //     value: 8,
+            //     message: "Password must be at least 8 characters",
+            //   },
+            //   pattern: {
+            //     value:
+            //       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            //     message:
+            //       "Password must contain at least one uppercase, one lowercase, one number and one special character",
+            //   },
           })}
           type="password"
           className="form-control"
@@ -126,6 +136,10 @@ const CommonForm = ({ register, errors, getValues }) => {
         <input
           {...register("primary_mobile", {
             required: "Phone number is required",
+            pattern: {
+              value: /^[0-9]{10,15}$/,
+              message: "Please enter a valid phone number",
+            },
           })}
           type="tel"
           className="form-control"
@@ -142,7 +156,12 @@ const CommonForm = ({ register, errors, getValues }) => {
           Secondary Phone Number
         </label>
         <input
-          {...register("secondary_mobile")}
+          {...register("secondary_mobile", {
+            pattern: {
+              value: /^[0-9]{10,15}$/,
+              message: "Please enter a valid phone number",
+            },
+          })}
           type="tel"
           className="form-control"
           id="secondary_mobile"
@@ -155,14 +174,17 @@ const CommonForm = ({ register, errors, getValues }) => {
           Landline
         </label>
         <input
-          {...register("landline")}
+          {...register("landline", {
+            pattern: {
+              value: /^[0-9]{10,15}$/,
+              message: "Please enter a valid phone number",
+            },
+          })}
           type="tel"
           className="form-control"
           id="landline"
         />
       </div>
-
-
 
       <div className="mb-3">
         <label htmlFor="gender" className="form-label">
@@ -173,6 +195,7 @@ const CommonForm = ({ register, errors, getValues }) => {
           {...register("gender", { required: "Gender is required" })}
           className="form-select"
           id="gender"
+          defaultValue=""
         >
           <option value="">Select Gender</option>
           <option value="male">Male</option>
@@ -191,6 +214,14 @@ const CommonForm = ({ register, errors, getValues }) => {
         <input
           {...register("profile_photo", {
             required: "Image upload is required",
+            // validate: {
+            //   lessThan5MB: (files) =>
+            //     files[0]?.size < 5000000 || "Maximum file size is 5MB",
+            //   acceptedFormats: (files) =>
+            //     ["image/jpeg", "image/png", "image/gif"].includes(
+            //       files[0]?.type
+            //     ) || "Only JPEG, PNG, and GIF images are allowed",
+            // },
           })}
           type="file"
           className="form-control"
