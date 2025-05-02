@@ -27,7 +27,8 @@ const patient_register = async (req, res) => {
         is_corporate_patient,
         has_insurance,
         is_smoker,
-        password } = req.body;
+        password,
+        last_name } = req.body;
     const profile_photo = req.file?.filename
         ? `/uploads/${req.file.filename}`
         : null;
@@ -58,7 +59,8 @@ const patient_register = async (req, res) => {
             has_insurance,
             is_smoker,
             password: hashedPassword,
-            profile_photo: profile_photo
+            profile_photo: profile_photo,
+            last_name
         });
 
         res.status(201).json({ message: 'Patient created successfully!' });
@@ -68,7 +70,19 @@ const patient_register = async (req, res) => {
 };
 
 const doctor_register = async (req, res) => {
-    const { name, email, password, specialty, contact_info } = req.body;
+    const { name,
+        email,
+        password,
+        specialty,
+        primary_mobile,
+        last_name,
+        gender,
+        secondary_mobile,
+        landline,
+        university_name,
+        graduation_year,
+        salary_per_session
+    } = req.body;
     // const profile_photo = req.file?.filename || null;
     const profile_photo = req.file?.filename
         ? `/uploads/${req.file.filename}`
@@ -82,7 +96,21 @@ const doctor_register = async (req, res) => {
     }
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newDoctor = await Doctor.create({ name, email, password: hashedPassword, specialty, contact_info, profile_photo: profile_photo });
+        const newDoctor = await Doctor.create({
+            name,
+            email,
+            password: hashedPassword,
+            specialty,
+            contact_info: primary_mobile,
+            profile_photo: profile_photo,
+            last_name,
+            gender,
+            secondary_mobile,
+            landline,
+            university_name,
+            graduation_year,
+            salary_per_session
+        });
 
         res.status(201).json({ message: 'doctor created successfully!' });
     } catch (error) {

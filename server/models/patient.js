@@ -24,8 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     referred_by: {
       type: Sequelize.TEXT,
     },
+    profile_photo: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     primary_mobile: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     secondary_mobile: {
       type: DataTypes.STRING,
@@ -35,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     address: {
       type: Sequelize.TEXT,
@@ -58,8 +64,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true,
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
+    last_name: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    }
   }, {
     tableName: 'patients',
     timestamps: false, // Assuming you want to use createdAt, updatedAt
@@ -70,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     // Assuming patient has medical history, test results, appointments, etc.
     Patient.hasMany(models.MedicalHistory, { foreignKey: 'patient_id' });
     Patient.hasMany(models.Appointment, { foreignKey: 'patient_id' });
-  
+
   };
 
   return Patient;

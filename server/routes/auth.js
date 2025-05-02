@@ -2,24 +2,20 @@ const { patient_register, doctor_register, login } = require('../user/user_contr
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-
-const diskStorage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads');
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    const ext = file.mimetype.split('/')[1];
-    const fileName = `user-${Date.now}.${ext}`;
-    cb(null, fileName)
-  }
-})
-const upload = multer({ storage: diskStorage });
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
 
-
-router.route('/register/patient')
+router.route('/register/patient', upload.single('profile_photo'))
   .post(patient_register);
 
-router.route('/register/doctor')
+router.route('/register/doctor', upload.single('profile_photo'))
   .post(doctor_register);
 
 router.route('/login')

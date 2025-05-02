@@ -13,5 +13,12 @@ router.get("/doctors/cardiology", async (req, res) => {
         res.status(500).json({ error: "Failed to load doctors" });
     }
 });
-
+// router.get("/patients", async (req, res) => {
+//   try {
+//     const patients = await Patient.findAll();
+//     res.json(patients);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 module.exports = router;
