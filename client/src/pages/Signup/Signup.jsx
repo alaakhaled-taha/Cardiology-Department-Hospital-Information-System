@@ -63,13 +63,8 @@ const SignupForm = () => {
 
       console.log(res);
       toast.success("Account created successfully!");
-<<<<<<< HEAD
-     // navigate("/profile");
      alert("login successful");
      navigate("/signin");
-=======
-      navigate("/signin");
->>>>>>> aae7693b7657fcbadae9a268916cc58accb27a9a
     } catch (err) {
       console.error("Signup error:", err);
       setError("root.server", {
