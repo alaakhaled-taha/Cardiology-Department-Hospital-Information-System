@@ -16,8 +16,12 @@ function Header() {
       <h1></h1>
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="#">About Us</a></li>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="#">About Us</a>
+          </li>
           <li
             className="dropdown"
             onMouseEnter={toggleDropdown}
@@ -26,19 +30,39 @@ function Header() {
             <a href="#">Departments</a>
             {dropdownVisible && (
               <ul className="dropdown-menu">
-                <li><Link to="/departments/cardiology">Cardiology</Link></li>
-                <li><a href="#">Radiology</a></li>
-                <li><a href="#">Surgery</a></li>
-                <li><a href="#">Emergency</a></li>
-                <li><a href="#">Hemodialysis</a></li>
-                <li><a href="#">Obstetrics and Gynecology</a></li>
-                <li><a href="#">Internal Medicine</a></li>
-                <li><a href="#">Ophthalmology</a></li>
+                <li>
+                  <Link to="/departments/cardiology">Cardiology</Link>
+                </li>
+                <li>
+                  <a href="#">Radiology</a>
+                </li>
+                <li>
+                  <a href="#">Surgery</a>
+                </li>
+                <li>
+                  <a href="#">Emergency</a>
+                </li>
+                <li>
+                  <a href="#">Hemodialysis</a>
+                </li>
+                <li>
+                  <a href="#">Obstetrics and Gynecology</a>
+                </li>
+                <li>
+                  <a href="#">Internal Medicine</a>
+                </li>
+                <li>
+                  <a href="#">Ophthalmology</a>
+                </li>
               </ul>
             )}
           </li>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="/Signin">Sign in</a></li>
+          <li>
+            <a href="#">Contact Us</a>
+          </li>
+          <li>
+            <a href="/Signin">Sign in</a>
+          </li>
         </ul>
       </nav>
     </header>
