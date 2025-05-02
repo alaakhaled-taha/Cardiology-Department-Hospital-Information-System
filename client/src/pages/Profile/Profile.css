@@ -15,7 +15,7 @@
 }
 
 .menu-icon {
-  font-size: 3rem;
+  font-size: 2.2rem;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 8px;
@@ -145,8 +145,29 @@
   background-color: #3b82f6;
 }
 
-.error {
-  color: red;
-  text-align: center;
-  margin-top: 2rem;
+.logout-button {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
+
+.logout-button:hover {
+  background-color: #ffff;
+}
+
+.logout-button {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #3b82f6;
+}
+

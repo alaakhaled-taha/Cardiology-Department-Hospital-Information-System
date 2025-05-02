@@ -16,6 +16,7 @@ import {
   FaMoneyBillWave,
   FaBars,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -23,6 +24,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [editedProfile, setEditedProfile] = useState({});
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const drawerRef = useRef(null);
 
@@ -40,6 +42,7 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(response.data);
+        setEditedProfile(response.data);
         setEditedProfile(response.data);
       } catch (err) {
         setError(err.response?.data?.error || "Failed to load profile.");
@@ -95,6 +98,11 @@ const Profile = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
+
   const renderField = (label, icon, field, isBoolean = false) => (
     <div className="profile-field">
       <label>
@@ -126,18 +134,24 @@ const Profile = () => {
       </div>
 
       <div className="drawer" ref={drawerRef} style={{ right: menuOpen ? "0" : "-240px" }}>
-        <ul>
-          <li className="active">
-            <FaUser style={{ marginRight: "8px" }} /> Profile
-          </li>
-          <li>
-            <FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard
-          </li>
-          <li>
-            <FaHeartbeat style={{ marginRight: "8px" }} /> Settings
-          </li>
-        </ul>
-      </div>
+  <ul>
+    <li className="active">
+      <FaUser style={{ marginRight: "8px" }} /> Profile
+    </li>
+    <li>
+      <FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard
+    </li>
+    <li>
+      <FaHeartbeat style={{ marginRight: "8px" }} /> Settings
+    </li>
+  </ul>
+  <div style={{ textAlign: "center", marginTop: "2rem" }}>
+    <button onClick={handleLogout} className="logout-button">
+      Log Out
+    </button>
+  </div>
+</div>
+
 
       <div className="profile-main">
         <div className="photo-section">
@@ -187,6 +201,9 @@ const Profile = () => {
               <>
                 <h2>Professional Details</h2>
                 {renderField("Specialty", <FaUserFriends />, "specialty")}
+                {renderField("Gender", <FaVenusMars />, "gender")}
+                {renderField("University Name", <FaBriefcaseMedical />, "university_name")}
+                {renderField("Graduation Year", <FaBirthdayCake />, "graduation_year")}
                 {renderField("Salary per Session", <FaMoneyBillWave />, "salary_per_session")}
               </>
             )}
@@ -199,6 +216,7 @@ const Profile = () => {
           {editMode ? "Save Changes" : "Edit Profile"}
         </button>
       </div>
+
     </div>
   );
 };
