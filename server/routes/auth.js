@@ -272,7 +272,7 @@ router.get("/patients", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
+});*/
 
 router.get("/doctors/cardiology", async (req, res) => {
   try {
@@ -313,6 +313,7 @@ router.get('/me', async (req, res) => {
     res.status(401).json({ error: 'Invalid token' });
   }
 });
+
 // router.get("/me", async (req, res) => {
 //   const token = req.headers.authorization?.split(" ")[1];
 //   if (!token) return res.status(401).json({ error: "No token provided" });
