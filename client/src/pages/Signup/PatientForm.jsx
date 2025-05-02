@@ -1,5 +1,11 @@
 import React from "react";
-import { FaUser, FaHeartbeat, FaStethoscope, FaMedkit } from "react-icons/fa"; // Importing from react-icons
+import {
+  FaUser,
+  FaHeartbeat,
+  FaStethoscope,
+  FaMedkit,
+  FaBirthdayCake,
+} from "react-icons/fa"; // Importing from react-icons
 
 import { bloodTypes } from "../../enums/bloodTypes";
 
@@ -60,6 +66,41 @@ const PatientForm = ({ register, errors }) => {
           <div className="invalid-feedback text-danger">
             {errors.spouse_name.message}
           </div>
+        )}
+      </div>
+      <div className="mb-3">
+        <label htmlFor="referred_by" className="form-label">
+          Who referred you?
+        </label>
+        <input
+          {...register("referred_by", {
+            required: "Referred by is required",
+          })}
+          type="text"
+          className="form-control"
+          id="referred_by"
+          placeholder="Enter who referred you"
+        />
+        {errors.referred_by && (
+          <p className="text-danger">{errors.referred_by.message}</p>
+        )}
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="date_of_birth" className="form-label">
+          <FaBirthdayCake className="me-2" />
+          Date of Birth
+        </label>
+        <input
+          {...register("date_of_birth", {
+            required: "Date of birth is required",
+          })}
+          type="date"
+          className="form-control"
+          id="date_of_birth"
+        />
+        {errors.date_of_birth && (
+          <p className="text-danger">{errors.date_of_birth.message}</p>
         )}
       </div>
 

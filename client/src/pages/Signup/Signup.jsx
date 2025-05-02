@@ -7,6 +7,7 @@ import PatientForm from "./PatientForm";
 import CommonForm from "./CommonForm";
 import { userTypes } from "../../enums/useType";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { FaUserMd, FaUserAlt, FaHeartbeat } from "react-icons/fa";
 
@@ -53,8 +54,8 @@ const SignupForm = () => {
     try {
       const res = await axios.post(apiUrl, formData);
       console.log(res);
-      alert("Account created successfully!");
-      navigate("/signin");
+      toast.success("Login successful");
+      navigate("/profile");
     } catch (err) {
       console.error(err);
       setError("root.server", {
@@ -104,7 +105,7 @@ const SignupForm = () => {
                       >
                         <FaUserMd className="me-2" />
                         I'm a Doctor
-                      </button>git 
+                      </button>
                       <button
                         className={`role-btn ${
                           userType === userTypes.patient ? "" : "selected"

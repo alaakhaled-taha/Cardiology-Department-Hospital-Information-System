@@ -162,23 +162,7 @@ const CommonForm = ({ register, errors, getValues }) => {
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="date_of_birth" className="form-label">
-          <FaBirthdayCake className="me-2" />
-          Date of Birth
-        </label>
-        <input
-          {...register("date_of_birth", {
-            required: "Date of birth is required",
-          })}
-          type="date"
-          className="form-control"
-          id="date_of_birth"
-        />
-        {errors.date_of_birth && (
-          <p className="text-danger">{errors.date_of_birth.message}</p>
-        )}
-      </div>
+
 
       <div className="mb-3">
         <label htmlFor="gender" className="form-label">
