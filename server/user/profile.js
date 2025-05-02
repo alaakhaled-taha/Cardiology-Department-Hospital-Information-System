@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: 'server/.env' });
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-router.get('/me', async (req, res) => {
+const me = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
@@ -34,11 +34,12 @@ router.get('/me', async (req, res) => {
         console.log(error);
         res.status(401).json({ error: 'Invalid token' });
     }
-});
+}
 
 
 
-router.put('/update', async (req, res) => {
+//added
+const update = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
@@ -58,7 +59,7 @@ router.put('/update', async (req, res) => {
         } else {
             return res.status(400).json({ error: 'Invalid role' });
         }
-delete updates.role;
+        delete updates.role;
 
         // Validate fields
         if (Object.keys(updates).length === 0) {
@@ -82,7 +83,9 @@ delete updates.role;
         console.error("Update error:", error);
         res.status(500).json({ error: 'Failed to update profile' });
     }
-});
+}
 
-
-module.exports = router;
+module.exports = {
+    me,
+    update
+};

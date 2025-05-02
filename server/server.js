@@ -6,7 +6,7 @@ const multer = require('multer'); // Import multer for file uploads
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
-const profileRoute = require('./user/profile')
+const profileRoute = require('./routes/profile')
 const doctorRoute = require('./routes/doctor')
 const { sequelize } = require('./models');
 
