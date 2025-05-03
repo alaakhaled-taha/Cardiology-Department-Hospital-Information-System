@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import "./Profile.css";
+
 import {
   FaUser,
   FaEnvelope,
@@ -17,6 +19,7 @@ import {
   FaBars,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { bloodTypes } from "../../enums/bloodTypes";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -26,6 +29,7 @@ const Profile = () => {
   const [editedProfile, setEditedProfile] = useState({});
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { register, formState: { errors } } = useForm();
   const drawerRef = useRef(null);
 
   useEffect(() => {
@@ -42,7 +46,6 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(response.data);
-        setEditedProfile(response.data);
         setEditedProfile(response.data);
       } catch (err) {
         setError(err.response?.data?.error || "Failed to load profile.");
@@ -134,24 +137,23 @@ const Profile = () => {
       </div>
 
       <div className="drawer" ref={drawerRef} style={{ right: menuOpen ? "0" : "-240px" }}>
-  <ul>
-    <li className="active">
-      <FaUser style={{ marginRight: "8px" }} /> Profile
-    </li>
-    <li>
-      <FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard
-    </li>
-    <li>
-      <FaHeartbeat style={{ marginRight: "8px" }} /> Settings
-    </li>
-  </ul>
-  <div style={{ textAlign: "center", marginTop: "2rem" }}>
-    <button onClick={handleLogout} className="logout-button">
-      Log Out
-    </button>
-  </div>
-</div>
-
+        <ul>
+          <li className="active">
+            <FaUser style={{ marginRight: "8px" }} /> Profile
+          </li>
+          <li>
+            <FaBriefcaseMedical style={{ marginRight: "8px" }} /> Dashboard
+          </li>
+          <li>
+            <FaHeartbeat style={{ marginRight: "8px" }} /> Settings
+          </li>
+        </ul>
+        <div style={{ textAlign: "center", marginTop: "2rem" }}>
+          <button onClick={handleLogout} className="logout-button">
+            Log Out
+          </button>
+        </div>
+      </div>
 
       <div className="profile-main">
         <div className="photo-section">
@@ -180,9 +182,76 @@ const Profile = () => {
             {profile.role === "patient" ? (
               <>
                 <h2>Personal Details</h2>
-                {renderField("Date of Birth", <FaBirthdayCake />, "date_of_birth")}
-                {renderField("Gender", <FaVenusMars />, "gender")}
-                {renderField("Blood Group", <FaSyringe />, "blood_group")}
+                <div className="mb-3">
+                  <label htmlFor="date_of_birth" className="form-label">
+                    <FaBirthdayCake className="me-2" />
+                    Date of Birth
+                  </label>
+                  {editMode ? (
+                    <input
+                      {...register("date_of_birth")}
+                      type="date"
+                      className="form-control"
+                      id="date_of_birth"
+                      defaultValue={editedProfile.date_of_birth || ""}
+                    />
+                  ) : (
+                    <span>{profile.date_of_birth || "N/A"}</span>
+                  )}
+                  {errors.date_of_birth && (
+                    <p className="text-danger">{errors.date_of_birth.message}</p>
+                  )}
+                </div>
+
+                {/* Gender */}
+                <div className="profile-field">
+                  <label>
+                    <FaVenusMars /> Gender
+                  </label>
+                  {editMode ? (
+                    <select
+                      id="gender"
+                      className="form-control"
+                      value={editedProfile.gender || ""}
+                      onChange={(e) => handleChange("gender", e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Gender
+                      </option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  ) : (
+                    <span>{profile.gender || "N/A"}</span>
+                  )}
+                </div>
+
+                {/* Blood Group Field */}
+                <div className="profile-field">
+                  <label>
+                    <FaSyringe /> Blood Group
+                  </label>
+                  {editMode ? (
+                    <select
+                      id="blood_group"
+                      className="form-control"
+                      value={editedProfile.blood_group || ""}
+                      onChange={(e) => handleChange("blood_group", e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Blood Type
+                      </option>
+                      {bloodTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span>{profile.blood_group || "N/A"}</span>
+                  )}
+                </div>
+
                 {renderField("Address", <FaMapMarkerAlt />, "address")}
                 {renderField("Primary Mobile", <FaPhoneAlt />, "primary_mobile")}
                 {renderField("Secondary Mobile", <FaPhoneAlt />, "secondary_mobile")}
@@ -216,7 +285,6 @@ const Profile = () => {
           {editMode ? "Save Changes" : "Edit Profile"}
         </button>
       </div>
-
     </div>
   );
 };

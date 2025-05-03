@@ -66,7 +66,6 @@ const update = async (req, res) => {
             return res.status(400).json({ error: 'No fields to update' });
         }
 
-        // Build dynamic SET clause
         const fields = Object.keys(updates);
         const values = Object.values(updates);
         const setClause = fields.map((field, index) => `${field} = ?`).join(', ');
