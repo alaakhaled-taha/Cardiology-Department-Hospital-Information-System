@@ -29,7 +29,10 @@ const Profile = () => {
   const [editedProfile, setEditedProfile] = useState({});
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { register, formState: { errors } } = useForm();
+  const {
+    register,
+    formState: { errors },
+  } = useForm();
   const drawerRef = useRef(null);
 
   useEffect(() => {
@@ -101,9 +104,25 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/signin");
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(response.data.message);
+
+      localStorage.removeItem("token");
+      navigate("/signin");
+    } catch (error) {
+      console.error("Logout error:", error.response?.data || error.message);
+      setError(error.response?.data?.error || "Failed to log out.");
+    }
   };
 
   const renderField = (label, icon, field, isBoolean = false) => (
@@ -119,7 +138,11 @@ const Profile = () => {
         />
       ) : (
         <span>
-          {isBoolean ? (profile[field] ? "Yes" : "No") : profile[field] ?? "N/A"}
+          {isBoolean
+            ? profile[field]
+              ? "Yes"
+              : "No"
+            : profile[field] ?? "N/A"}
         </span>
       )}
     </div>
@@ -136,7 +159,11 @@ const Profile = () => {
         <FaBars className="menu-icon" onClick={() => setMenuOpen(!menuOpen)} />
       </div>
 
-      <div className="drawer" ref={drawerRef} style={{ right: menuOpen ? "0" : "-240px" }}>
+      <div
+        className="drawer"
+        ref={drawerRef}
+        style={{ right: menuOpen ? "0" : "-240px" }}
+      >
         <ul>
           <li className="active">
             <FaUser style={{ marginRight: "8px" }} /> Profile
@@ -199,7 +226,9 @@ const Profile = () => {
                     <span>{profile.date_of_birth || "N/A"}</span>
                   )}
                   {errors.date_of_birth && (
-                    <p className="text-danger">{errors.date_of_birth.message}</p>
+                    <p className="text-danger">
+                      {errors.date_of_birth.message}
+                    </p>
                   )}
                 </div>
 
@@ -236,7 +265,9 @@ const Profile = () => {
                       id="blood_group"
                       className="form-control"
                       value={editedProfile.blood_group || ""}
-                      onChange={(e) => handleChange("blood_group", e.target.value)}
+                      onChange={(e) =>
+                        handleChange("blood_group", e.target.value)
+                      }
                     >
                       <option value="" disabled>
                         Select Blood Type
@@ -253,8 +284,16 @@ const Profile = () => {
                 </div>
 
                 {renderField("Address", <FaMapMarkerAlt />, "address")}
-                {renderField("Primary Mobile", <FaPhoneAlt />, "primary_mobile")}
-                {renderField("Secondary Mobile", <FaPhoneAlt />, "secondary_mobile")}
+                {renderField(
+                  "Primary Mobile",
+                  <FaPhoneAlt />,
+                  "primary_mobile"
+                )}
+                {renderField(
+                  "Secondary Mobile",
+                  <FaPhoneAlt />,
+                  "secondary_mobile"
+                )}
                 {renderField("Landline", <FaPhoneAlt />, "landline")}
 
                 <h2>Family Details</h2>
@@ -262,18 +301,62 @@ const Profile = () => {
                 {renderField("Spouse Name", <FaUserFriends />, "spouse_name")}
 
                 <h2>Other Details</h2>
-                {renderField("Corporate Patient", <FaBriefcaseMedical />, "is_corporate_patient", true)}
-                {renderField("Has Insurance", <FaHeartbeat />, "has_insurance", true)}
+                {renderField(
+                  "Corporate Patient",
+                  <FaBriefcaseMedical />,
+                  "is_corporate_patient",
+                  true
+                )}
+                {renderField(
+                  "Has Insurance",
+                  <FaHeartbeat />,
+                  "has_insurance",
+                  true
+                )}
                 {renderField("Smoker", <FaSmoking />, "is_smoker", true)}
               </>
             ) : (
               <>
                 <h2>Professional Details</h2>
                 {renderField("Specialty", <FaUserFriends />, "specialty")}
-                {renderField("Gender", <FaVenusMars />, "gender")}
-                {renderField("University Name", <FaBriefcaseMedical />, "university_name")}
-                {renderField("Graduation Year", <FaBirthdayCake />, "graduation_year")}
-                {renderField("Salary per Session", <FaMoneyBillWave />, "salary_per_session")}
+                {/* {renderField("Gender", <FaVenusMars />, "gender")} */}
+                {/* Gender */}
+                <div className="profile-field">
+                  <label>
+                    <FaVenusMars /> Gender
+                  </label>
+                  {editMode ? (
+                    <select
+                      id="gender"
+                      className="form-control"
+                      value={editedProfile.gender || ""}
+                      onChange={(e) => handleChange("gender", e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Gender
+                      </option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  ) : (
+                    <span>{profile.gender || "N/A"}</span>
+                  )}
+                </div>
+                {renderField(
+                  "University Name",
+                  <FaBriefcaseMedical />,
+                  "university_name"
+                )}
+                {renderField(
+                  "Graduation Year",
+                  <FaBirthdayCake />,
+                  "graduation_year"
+                )}
+                {renderField(
+                  "Salary per Session",
+                  <FaMoneyBillWave />,
+                  "salary_per_session"
+                )}
               </>
             )}
           </div>
@@ -281,7 +364,10 @@ const Profile = () => {
       </div>
 
       <div className="edit-button-fixed">
-        <button type="button" onClick={() => (editMode ? handleSave() : setEditMode(true))}>
+        <button
+          type="button"
+          onClick={() => (editMode ? handleSave() : setEditMode(true))}
+        >
           {editMode ? "Save Changes" : "Edit Profile"}
         </button>
       </div>

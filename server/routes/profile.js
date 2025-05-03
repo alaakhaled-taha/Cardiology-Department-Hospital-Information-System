@@ -1,8 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { me, update } = require('../user/profile');
-router.get('/me', me);
+const { me, update, logout } = require("../user/profile");
+router.get("/me", me);
 
-router.put('/update', update);
+router.put("/update", update);
+
+router.post("/logout", logout);
 
 module.exports = router;

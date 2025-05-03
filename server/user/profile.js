@@ -84,7 +84,15 @@ const update = async (req, res) => {
     }
 }
 
+// logout
+const logout = async (req, res) => {
+
+    res.json({ message: 'Logged out successfully' });
+};
+
+
 module.exports = {
     me,
-    update
+    update,
+    logout
 };
