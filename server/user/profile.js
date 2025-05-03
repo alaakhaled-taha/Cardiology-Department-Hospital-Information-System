@@ -60,8 +60,23 @@ const update = async (req, res) => {
             return res.status(400).json({ error: 'Invalid role' });
         }
         delete updates.role;
+       
+    try {
+        const updates = req.body;
+        
+        // Handle file upload
+        if (req.file) {
+            updates.profile_photo = `/uploads/${req.file.filename}`;
+        }
 
-        // Validate fields
+        
+    } catch (error) {
+        console.error("Update error:", error);
+        res.status(500).json({ 
+            error: 'Failed to update profile',
+            details: error.message
+        });
+    }
         if (Object.keys(updates).length === 0) {
             return res.status(400).json({ error: 'No fields to update' });
         }

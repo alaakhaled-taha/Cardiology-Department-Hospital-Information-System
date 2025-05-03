@@ -86,10 +86,28 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:5000/api/auth/update", editedProfile, {
-        headers: { Authorization: `Bearer ${token}` },
+      const formData = new FormData();
+
+      // Append all fields except profile_photo
+      Object.entries(editedProfile).forEach(([key, value]) => {
+        if (key !== "profile_photo") {
+          formData.append(key, value);
+        }
       });
 
+      // Append profile_photo file if present and is a File object
+      if (editedProfile.profile_photo instanceof File) {
+        formData.append("profile_photo", editedProfile.profile_photo);
+      }
+
+      await axios.put("http://localhost:5000/api/auth/update", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Refresh profile data
       const response = await axios.get("http://localhost:5000/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -138,11 +156,7 @@ const Profile = () => {
         />
       ) : (
         <span>
-          {isBoolean
-            ? profile[field]
-              ? "Yes"
-              : "No"
-            : profile[field] ?? "N/A"}
+          {isBoolean ? (profile[field] ? "Yes" : "No") : profile[field] ?? "N/A"}
         </span>
       )}
     </div>
@@ -193,6 +207,13 @@ const Profile = () => {
             alt="Profile"
             className="profile-pic"
           />
+          {editMode && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleChange("profile_photo", e.target.files[0])}
+            />
+          )}
           <h3 className="profile-name">{profile.name}</h3>
         </div>
 
@@ -221,14 +242,13 @@ const Profile = () => {
                       className="form-control"
                       id="date_of_birth"
                       defaultValue={editedProfile.date_of_birth || ""}
+                      onChange={(e) => handleChange("date_of_birth", e.target.value)}
                     />
                   ) : (
                     <span>{profile.date_of_birth || "N/A"}</span>
                   )}
                   {errors.date_of_birth && (
-                    <p className="text-danger">
-                      {errors.date_of_birth.message}
-                    </p>
+                    <p className="text-danger">{errors.date_of_birth.message}</p>
                   )}
                 </div>
 
@@ -265,9 +285,7 @@ const Profile = () => {
                       id="blood_group"
                       className="form-control"
                       value={editedProfile.blood_group || ""}
-                      onChange={(e) =>
-                        handleChange("blood_group", e.target.value)
-                      }
+                      onChange={(e) => handleChange("blood_group", e.target.value)}
                     >
                       <option value="" disabled>
                         Select Blood Type
@@ -284,16 +302,8 @@ const Profile = () => {
                 </div>
 
                 {renderField("Address", <FaMapMarkerAlt />, "address")}
-                {renderField(
-                  "Primary Mobile",
-                  <FaPhoneAlt />,
-                  "primary_mobile"
-                )}
-                {renderField(
-                  "Secondary Mobile",
-                  <FaPhoneAlt />,
-                  "secondary_mobile"
-                )}
+                {renderField("Primary Mobile", <FaPhoneAlt />, "primary_mobile")}
+                {renderField("Secondary Mobile", <FaPhoneAlt />, "secondary_mobile")}
                 {renderField("Landline", <FaPhoneAlt />, "landline")}
 
                 <h2>Family Details</h2>
@@ -301,26 +311,14 @@ const Profile = () => {
                 {renderField("Spouse Name", <FaUserFriends />, "spouse_name")}
 
                 <h2>Other Details</h2>
-                {renderField(
-                  "Corporate Patient",
-                  <FaBriefcaseMedical />,
-                  "is_corporate_patient",
-                  true
-                )}
-                {renderField(
-                  "Has Insurance",
-                  <FaHeartbeat />,
-                  "has_insurance",
-                  true
-                )}
+                {renderField("Corporate Patient", <FaBriefcaseMedical />, "is_corporate_patient", true)}
+                {renderField("Has Insurance", <FaHeartbeat />, "has_insurance", true)}
                 {renderField("Smoker", <FaSmoking />, "is_smoker", true)}
               </>
             ) : (
               <>
                 <h2>Professional Details</h2>
                 {renderField("Specialty", <FaUserFriends />, "specialty")}
-                {/* {renderField("Gender", <FaVenusMars />, "gender")} */}
-                {/* Gender */}
                 <div className="profile-field">
                   <label>
                     <FaVenusMars /> Gender
@@ -342,21 +340,9 @@ const Profile = () => {
                     <span>{profile.gender || "N/A"}</span>
                   )}
                 </div>
-                {renderField(
-                  "University Name",
-                  <FaBriefcaseMedical />,
-                  "university_name"
-                )}
-                {renderField(
-                  "Graduation Year",
-                  <FaBirthdayCake />,
-                  "graduation_year"
-                )}
-                {renderField(
-                  "Salary per Session",
-                  <FaMoneyBillWave />,
-                  "salary_per_session"
-                )}
+                {renderField("University Name", <FaBriefcaseMedical />, "university_name")}
+                {renderField("Graduation Year", <FaBirthdayCake />, "graduation_year")}
+                {renderField("Salary per Session", <FaMoneyBillWave />, "salary_per_session")}
               </>
             )}
           </div>

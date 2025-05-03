@@ -13,7 +13,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 //APIs for registeration of patient and doctor
 const patient_register = async (req, res) => {
     console.log('Body:', req.body);
-    console.log('File:', req.file);  // Log the file to ensure multer is processing it
+    console.log('File:', req.file);  //to ensure multer is processing it
 
     const { name, date_of_birth, gender, blood_group, referred_by, primary_mobile, secondary_mobile, landline, email, address, parent_name, spouse_name, is_corporate_patient, has_insurance, is_smoker, password, last_name } = req.body;
     const profile_photo = req.file?.filename ? `/uploads/${req.file.filename}` : null;

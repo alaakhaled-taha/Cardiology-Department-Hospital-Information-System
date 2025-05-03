@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const { update } = require('../user/profile');
 
 // Setup multer for file storage
 const storage = multer.diskStorage({
@@ -19,6 +20,7 @@ const upload = multer({ storage: storage });
 
 router.post('/register/patient', upload.single('profile_photo'), patient_register);
 router.post('/register/doctor', upload.single('profile_photo'), doctor_register);
+router.put('/update', upload.single('profile_photo'), update);
 
 
 router.post('/login', login);
